@@ -15,7 +15,8 @@ COPY requirements.txt /app/
 
 # Installing Python dependencies
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+    pip install --no-cache-dir -r requirements.txt && \
+    rm -rf /root/.cache/pip/*
 
 # Copying the rest of the project files
 COPY . /app/

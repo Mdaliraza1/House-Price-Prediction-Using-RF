@@ -5,14 +5,21 @@ echo "==========================================="
 echo "Deployment Started"
 echo "==========================================="
 
+echo "Checking disk space..."
+df -h
+
 echo "Stopping existing containers..."
 sudo docker-compose down --remove-orphans 2>&1 || true
 
-echo "Pulling latest images if any..."
-sudo docker-compose pull 2>&1 || true
+echo "Cleaning up Docker system to free space..."
+sudo docker system prune -af --volumes 2>&1 || true
+sudo docker builder prune -af 2>&1 || true
 
-echo "Building containers..."
-sudo docker-compose build --no-cache 2>&1
+echo "Disk space after cleanup:"
+df -h
+
+echo "Building containers (this may take a few minutes)..."
+sudo docker-compose build 2>&1
 
 echo "Starting containers in detached mode..."
 sudo docker-compose up -d --force-recreate --remove-orphans 2>&1
