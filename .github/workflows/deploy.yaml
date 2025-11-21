@@ -20,6 +20,12 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           command_timeout: 30m
           script: |
+            set -e
+            
+            echo "========================================="
+            echo "Starting deployment process..."
+            echo "========================================="
+            
             # Create directory if it doesn't exist
             mkdir -p ~/House_Price_Prediction
             cd ~/House_Price_Prediction || exit 1
@@ -39,12 +45,28 @@ jobs:
               touch .env
             fi
 
-            # Install Docker if not already installed
-            if ! docker info &> /dev/null; then
+            # Check Docker installation
+            echo "Checking Docker installation..."
+            if ! sudo docker info &> /dev/null; then
+              echo "Docker not found or not running. Installing..."
               sudo chmod +x .scripts/install-docker.sh
               .scripts/install-docker.sh
+            else
+              echo "Docker is already installed and running."
             fi
 
-            # Running docker-compose up / down...
+            # Make start-docker.sh executable and run it
+            echo "Preparing to start Docker containers..."
             sudo chmod +x .scripts/start-docker.sh
-            .scripts/start-docker.sh
+            
+            # Run the deployment script with timeout protection
+            timeout 600 .scripts/start-docker.sh || {
+              echo "Deployment script timed out or failed"
+              echo "Checking container status..."
+              sudo docker ps -a
+              exit 1
+            }
+            
+            echo "========================================="
+            echo "Deployment process completed!"
+            echo "========================================="
