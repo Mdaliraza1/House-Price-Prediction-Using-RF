@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt /app/
 
 # Installing Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt --verbose
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
 # Copying the rest of the project files
 COPY . /app/
