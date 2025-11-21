@@ -19,9 +19,18 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            # Create directory if it doesn't exist
+            mkdir -p ~/House_Price_Prediction
             cd ~/House_Price_Prediction
-            # Pulling latest changes....
-            git pull origin main
+            
+            # Clone repository if it doesn't exist, otherwise pull latest changes
+            if [ ! -d .git ]; then
+              echo "Repository not found. Cloning..."
+              git clone https://github.com/Mdaliraza1/House-Price-Prediction-Using-RF.git .
+            else
+              echo "Pulling latest changes..."
+              git pull origin main
+            fi
 
             # Install Docker if not already installed
             if ! docker info &> /dev/null; then
