@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="hero-section">
+        <h2 class="hero-title">Predict Your House Price</h2>
+        <p class="hero-subtitle">Enter your property details below to get an accurate price prediction</p>
+    </div>
+
+    <div class="form-container">
+        <form method="POST" id="predictionForm" class="prediction-form">
+            {% csrf_token %}
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="bedrooms" class="form-label">
+                        <span class="label-icon">🛏️</span>
+                        Number of Bedrooms
+                    </label>
+                    <input 
+                        type="number" 
+                        id="bedrooms" 
+                        name="bedrooms" 
+                        class="form-input" 
+                        min="1" 
+                        max="10" 
+                        required
+                        placeholder="e.g., 3"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="bathrooms" class="form-label">
+                        <span class="label-icon">🚿</span>
+                        Number of Bathrooms
+                    </label>
+                    <input 
+                        type="number" 
+                        id="bathrooms" 
+                        name="bathrooms" 
+                        class="form-input" 
+                        min="0.5" 
+                        max="10" 
+                        step="0.5"
+                        required
+                        placeholder="e.g., 2.5"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="living_area" class="form-label">
+                        <span class="label-icon">📐</span>
+                        Living Area (sq ft)
+                    </label>
+                    <input 
+                        type="number" 
+                        id="living_area" 
+                        name="living_area" 
+                        class="form-input" 
+                        min="100" 
+                        required
+                        placeholder="e.g., 1200"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="lot_area" class="form-label">
+                        <span class="label-icon">🏞️</span>
+                        Lot Area (sq ft)
+                    </label>
+                    <input 
+                        type="number" 
+                        id="lot_area" 
+                        name="lot_area" 
+                        class="form-input" 
+                        min="100" 
+                        required
+                        placeholder="e.g., 2000"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="floor" class="form-label">
+                        <span class="label-icon">🏢</span>
+                        Floor Number
+                    </label>
+                    <input 
+                        type="number" 
+                        id="floor" 
+                        name="floor" 
+                        class="form-input" 
+                        min="0" 
+                        max="50"
+                        required
+                        placeholder="e.g., 2"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="property_type" class="form-label">
+                        <span class="label-icon">🏘️</span>
+                        Property Type
+                    </label>
+                    <select 
+                        id="property_type" 
+                        name="property_type" 
+                        class="form-input" 
+                        required
+                    >
+                        <option value="">Select Property Type</option>
+                        {% for prop_type in property_types %}
+                        <option value="{{ prop_type }}">{{ prop_type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="latitude" class="form-label">
+                        <span class="label-icon">📍</span>
+                        Latitude
+                    </label>
+                    <input 
+                        type="number" 
+                        id="latitude" 
+                        name="latitude" 
+                        class="form-input" 
+                        min="-90" 
+                        max="90" 
+                        step="0.000001"
+                        required
+                        placeholder="e.g., 28.4595"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="longitude" class="form-label">
+                        <span class="label-icon">🌐</span>
+                        Longitude
+                    </label>
+                    <input 
+                        type="number" 
+                        id="longitude" 
+                        name="longitude" 
+                        class="form-input" 
+                        min="-180" 
+                        max="180" 
+                        step="0.000001"
+                        required
+                        placeholder="e.g., 77.0266"
+                    >
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span class="btn-text">Predict Price</span>
+                    <span class="btn-loader" style="display: none;">⏳ Predicting...</span>
+                </button>
+            </div>
+        </form>
+
+        {% if error_message %}
+        <div class="alert alert-error">
+            <span class="alert-icon">⚠️</span>
+            <span class="alert-message">{{ error_message }}</span>
+        </div>
+        {% endif %}
+
+        {% if prediction %}
+        <div class="result-card" id="resultCard">
+            <div class="result-header">
+                <h3 class="result-title">💰 Predicted Price</h3>
+            </div>
+            <div class="result-content">
+                <div class="price-display">
+                    <span class="price-amount">{{ prediction.formatted_price }}</span>
+                </div>
+                <div class="result-info">
+                    <p class="result-note">This is an estimated price based on your property details.</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
