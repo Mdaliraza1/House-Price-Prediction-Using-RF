@@ -16,13 +16,22 @@ sudo apt-get install -y python3 python3-pip python3-venv git nginx
 # Install PostgreSQL (optional, if not using SQLite)
 # sudo apt-get install -y postgresql postgresql-contrib
 
-# Create application directory
-APP_DIR="/var/www/house-price-prediction"
-sudo mkdir -p $APP_DIR
-sudo chown $USER:$USER $APP_DIR
+# Get the directory where this script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+APP_DIR="$SCRIPT_DIR"
 
-# Clone repository (or create directory for manual upload)
-cd $APP_DIR
+# Change to script directory
+cd "$APP_DIR"
+
+# Verify requirements.txt exists
+if [ ! -f "requirements.txt" ]; then
+    echo "Error: requirements.txt not found in $APP_DIR"
+    echo "Current directory: $PWD"
+    echo "Please run this script from the directory containing requirements.txt"
+    exit 1
+fi
+
+echo "Using application directory: $APP_DIR"
 
 # Create virtual environment
 python3 -m venv venv
@@ -32,10 +41,14 @@ source venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Create settings.ini from template
+# Create settings.ini from template (check in current directory)
 if [ ! -f settings.ini ]; then
-    cp settings.ini.example settings.ini
-    echo "Please edit settings.ini with your production settings!"
+    if [ -f settings.ini.example ]; then
+        cp settings.ini.example settings.ini
+        echo "Please edit settings.ini with your production settings!"
+    else
+        echo "Warning: settings.ini.example not found. You'll need to create settings.ini manually."
+    fi
 fi
 
 # Collect static files
