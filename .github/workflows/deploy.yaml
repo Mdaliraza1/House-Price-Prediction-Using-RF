@@ -59,13 +59,8 @@ jobs:
             echo "Preparing to start Docker containers..."
             sudo chmod +x .scripts/start-docker.sh
             
-            # Run the deployment script with timeout protection
-            timeout 600 .scripts/start-docker.sh || {
-              echo "Deployment script timed out or failed"
-              echo "Checking container status..."
-              sudo docker ps -a
-              exit 1
-            }
+            # Run the deployment script
+            .scripts/start-docker.sh
             
             echo "========================================="
             echo "Deployment process completed!"
