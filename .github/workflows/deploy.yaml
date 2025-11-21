@@ -21,15 +21,15 @@ jobs:
           script: |
             # Create directory if it doesn't exist
             mkdir -p ~/House_Price_Prediction
-            cd ~/House_Price_Prediction
+            cd ~/House_Price_Prediction || exit 1
             
             # Clone repository if it doesn't exist, otherwise pull latest changes
             if [ ! -d .git ]; then
               echo "Repository not found. Cloning..."
-              git clone https://github.com/Mdaliraza1/House-Price-Prediction-Using-RF.git .
+              git clone https://github.com/Mdaliraza1/House-Price-Prediction-Using-RF.git . || exit 1
             else
               echo "Pulling latest changes..."
-              git pull origin main
+              git pull origin main || exit 1
             fi
 
             # Install Docker if not already installed
