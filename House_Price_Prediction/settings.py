@@ -1,20 +1,62 @@
 
 from pathlib import Path
+import configparser
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load settings from settings.ini
+config = configparser.ConfigParser()
+settings_ini_path = BASE_DIR / 'settings.ini'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+# Read settings.ini if it exists, otherwise use defaults
+if settings_ini_path.exists():
+    config.read(settings_ini_path)
+    # Determine environment from DEFAULT section
+    env_value = config.get('DEFAULT', 'ENVIRONMENT', fallback='development')
+    if env_value == 'production':
+        ENV = 'PRODUCTION'
+    elif env_value == 'staging':
+        ENV = 'STAGING'
+    else:
+        ENV = 'DEFAULT'
+else:
+    ENV = 'DEFAULT'
+    config.add_section('DEFAULT')
+
+# Get settings with fallback to defaults
+def get_setting(section, key, default=None, fallback_section='DEFAULT'):
+    """Get setting from config file with fallback"""
+    if config.has_option(section, key):
+        value = config.get(section, key)
+        # Handle boolean values
+        if value.lower() in ('true', 'false'):
+            return config.getboolean(section, key)
+        # Handle list values (comma-separated)
+        if ',' in value:
+            return [item.strip() for item in value.split(',')]
+        return value
+    elif fallback_section and config.has_option(fallback_section, key):
+        value = config.get(fallback_section, key)
+        if value.lower() in ('true', 'false'):
+            return config.getboolean(fallback_section, key)
+        if ',' in value:
+            return [item.strip() for item in value.split(',')]
+        return value
+    return default
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-=6p*(+h-h144og6wol-9i+v-$_$_x=&vj*eml$(c45b@z8*fqi"
+SECRET_KEY = get_setting(ENV, 'SECRET_KEY', 
+    default=os.environ.get('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_setting(ENV, 'DEBUG', default=True)
 
-ALLOWED_HOSTS = ['*']
+# Allowed hosts
+ALLOWED_HOSTS = get_setting(ENV, 'ALLOWED_HOSTS', default=['*'])
+if isinstance(ALLOWED_HOSTS, str):
+    ALLOWED_HOSTS = [ALLOWED_HOSTS]
 
 
 # Application definition

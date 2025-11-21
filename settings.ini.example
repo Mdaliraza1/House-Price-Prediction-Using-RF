@@ -1,0 +1,23 @@
+[DEFAULT]
+# Environment: development, staging, production
+ENVIRONMENT=development
+
+# Django Secret Key - Generate a new one for production!
+SECRET_KEY=django-insecure-=6p*(+h-h144og6wol-9i+v-$_$_x=&vj*eml$(c45b@z8*fqi
+
+# Debug mode (True/False)
+DEBUG=True
+
+# Allowed hosts (comma-separated)
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+[PRODUCTION]
+ENVIRONMENT=production
+DEBUG=False
+ALLOWED_HOSTS=your-domain.com,www.your-domain.com
+
+[STAGING]
+ENVIRONMENT=staging
+DEBUG=True
+ALLOWED_HOSTS=staging.your-domain.com
+

@@ -2,6 +2,7 @@ asgiref==3.11.0
 Django==5.2.8
 django-restframework==0.0.1
 djangorestframework==3.16.1
+gunicorn==21.2.0
 joblib==1.5.2
 numpy==2.3.5
 pandas==2.3.3
