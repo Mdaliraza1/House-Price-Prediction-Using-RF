@@ -44,14 +44,25 @@ python manage.py collectstatic --noinput
 python manage.py migrate --noinput
 
 # Restart application server
-# For systemd service
-sudo systemctl restart house-price-prediction || true
+echo "Restarting application service..."
+if sudo systemctl restart house-price-prediction; then
+    echo "✓ Service restarted successfully"
+    sudo systemctl status house-price-prediction --no-pager -l || true
+else
+    echo "✗ Failed to restart service"
+    sudo systemctl status house-price-prediction --no-pager -l || true
+    exit 1
+fi
 
-# Or for supervisor
-# sudo supervisorctl restart house-price-prediction || true
-
-# Or for gunicorn directly (if running as service)
-# sudo systemctl restart gunicorn || true
+# Verify service is running
+sleep 2
+if sudo systemctl is-active --quiet house-price-prediction; then
+    echo "✓ Service is running"
+else
+    echo "✗ Service is not running!"
+    sudo systemctl status house-price-prediction --no-pager -l
+    exit 1
+fi
 
 echo "Deployment completed successfully!"
 
