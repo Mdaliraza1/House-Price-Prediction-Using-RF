@@ -23,7 +23,7 @@ if settings_ini_path.exists():
         ENV = 'DEFAULT'
 else:
     ENV = 'DEFAULT'
-    config.add_section('DEFAULT')
+    # Don't add DEFAULT section - it's special in ConfigParser
 
 # Get settings with fallback to defaults
 def get_setting(section, key, default=None, fallback_section='DEFAULT'):
