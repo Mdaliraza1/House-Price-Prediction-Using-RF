@@ -59,8 +59,11 @@ jobs:
             echo "Preparing to start Docker containers..."
             sudo chmod +x .scripts/start-docker.sh
             
-            # Run the deployment script
-            .scripts/start-docker.sh
+            # Run the deployment script with explicit bash
+            echo "Running deployment script..."
+            bash .scripts/start-docker.sh
+            
+            echo "Deployment script execution completed"
             
             echo "========================================="
             echo "Deployment process completed!"
