@@ -12,8 +12,18 @@ echo "Stopping existing containers..."
 sudo docker-compose down --remove-orphans 2>&1 || true
 
 echo "Cleaning up Docker system to free space..."
+echo "Removing all Docker containers, images, and volumes..."
+sudo docker stop $(sudo docker ps -aq) 2>&1 || true
+sudo docker rm $(sudo docker ps -aq) 2>&1 || true
+sudo docker rmi -f $(sudo docker images -aq) 2>&1 || true
+sudo docker volume prune -af 2>&1 || true
 sudo docker system prune -af --volumes 2>&1 || true
 sudo docker builder prune -af 2>&1 || true
+
+echo "Cleaning system temporary files..."
+sudo rm -rf /tmp/* 2>&1 || true
+sudo apt-get clean 2>&1 || true
+sudo journalctl --vacuum-time=1d 2>&1 || true
 
 echo "Disk space after cleanup:"
 df -h

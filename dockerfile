@@ -4,31 +4,35 @@ FROM python:3.11-slim
 # Setting the working directory
 WORKDIR /app
 
-# Installing system libraries
+# Installing system libraries and Python dependencies in one layer
 RUN apt-get update && apt-get install -y \
     gcc libpq-dev --no-install-recommends && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Copying requirements file first to leverage Docker caching
+# Copying requirements file first
 COPY requirements.txt /app/
 
-# Installing Python dependencies
-RUN pip install --upgrade pip && \
+# Installing Python dependencies with aggressive cleanup
+RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt && \
-    rm -rf /root/.cache/pip/*
+    find /usr/local/lib/python3.11 -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true && \
+    find /usr/local/lib/python3.11 -type d -name 'tests' -exec rm -rf {} + 2>/dev/null || true && \
+    find /usr/local/lib/python3.11 -type f -name '*.pyc' -delete && \
+    find /usr/local/lib/python3.11 -type f -name '*.pyo' -delete && \
+    rm -rf /root/.cache /tmp/*
 
-# Copying the rest of the project files
+# Copying project files
 COPY . /app/
-
-# Copying start.sh to a different directory to avoid volume overwrite
 COPY .scripts/start.sh /start.sh
 
-# Give execute permissions to start.sh
-RUN chmod +x /start.sh
+# Set permissions and cleanup
+RUN chmod +x /start.sh && \
+    find /app -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true && \
+    find /app -type f -name '*.pyc' -delete
 
-# Exposing the port for the app
+# Exposing the port
 EXPOSE 8000
 
-# Command to run migrations and start the server
+# Start command
 CMD ["sh", "/start.sh"]
