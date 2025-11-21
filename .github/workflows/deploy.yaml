@@ -36,7 +36,10 @@ jobs:
               git clone https://github.com/Mdaliraza1/House-Price-Prediction-Using-RF.git . || exit 1
             else
               echo "Pulling latest changes..."
+              echo "Stashing any local changes..."
+              git stash --include-untracked || true
               git pull origin main || exit 1
+              echo "Latest code pulled successfully"
             fi
 
             # Create .env file if it doesn't exist (required by docker-compose)
