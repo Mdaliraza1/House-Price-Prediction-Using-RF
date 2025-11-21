@@ -6,7 +6,23 @@ set -e
 echo "Starting deployment..."
 
 # Navigate to application directory
-cd /home/ubuntu/house-price-prediction || cd /var/www/house-price-prediction
+# Try multiple possible locations
+if [ -d "/var/www/house-price-prediction/House-Price-Prediction-Using-RF" ]; then
+    cd /var/www/house-price-prediction/House-Price-Prediction-Using-RF
+elif [ -d "/var/www/house-price-prediction" ]; then
+    cd /var/www/house-price-prediction
+elif [ -d "/home/ubuntu/house-price-prediction" ]; then
+    cd /home/ubuntu/house-price-prediction
+else
+    echo "Error: Application directory not found!"
+    echo "Searched in:"
+    echo "  - /var/www/house-price-prediction/House-Price-Prediction-Using-RF"
+    echo "  - /var/www/house-price-prediction"
+    echo "  - /home/ubuntu/house-price-prediction"
+    exit 1
+fi
+
+echo "Current directory: $(pwd)"
 
 # Pull latest code
 git pull origin main || git pull origin master
