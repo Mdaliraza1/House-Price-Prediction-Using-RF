@@ -28,6 +28,7 @@ COPY .scripts/start.sh /start.sh
 
 # Set permissions and cleanup
 RUN chmod +x /start.sh && \
+    mkdir -p /app/static /app/media && \
     find /app -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true && \
     find /app -type f -name '*.pyc' -delete
 
@@ -35,4 +36,4 @@ RUN chmod +x /start.sh && \
 EXPOSE 8000
 
 # Start command
-CMD ["sh", "/start.sh"]
+CMD ["bash", "/start.sh"]

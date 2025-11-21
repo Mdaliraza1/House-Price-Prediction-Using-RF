@@ -42,10 +42,19 @@ jobs:
               echo "Latest code pulled successfully"
             fi
 
-            # Create .env file if it doesn't exist (required by docker-compose)
-            if [ ! -f .env ]; then
-              echo "Creating .env file..."
-              touch .env
+            # Create .env file with proper configuration
+            echo "Creating/Updating .env file..."
+            cat > .env << 'EOL'
+            DEBUG=True
+            DJANGO_SETTINGS_MODULE=House_Price_Prediction.settings
+            ALLOWED_HOSTS=*
+            SECRET_KEY=django-insecure-production-key-$(openssl rand -hex 32)
+            EOL
+            
+            # Create settings.ini if it doesn't exist
+            if [ ! -f settings.ini ]; then
+              echo "Creating settings.ini from example..."
+              cp settings.ini.example settings.ini || echo "settings.ini.example not found, using defaults"
             fi
 
             # Check Docker installation
