@@ -18,6 +18,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: 30m
           script: |
             # Create directory if it doesn't exist
             mkdir -p ~/House_Price_Prediction
