@@ -5,6 +5,22 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def portfolio_home(request):
+    """
+    Portfolio homepage showcasing profile and projects.
+    """
+    context = {
+        'name': 'Md Ali Raza',
+        'title': 'Python Backend Developer & ML Engineer',
+        'email': 'mdaliraza92@gmail.com',
+        'phone': '+91 98049 21119',
+        'github': 'mdaliraza1',
+        'linkedin': 'mdaliraza1',
+        'summary': 'Aspiring Python backend developer and Computer Science undergraduate with hands-on experience in Django, Django REST Framework (DRF), Machine Learning workflows, and scalable API development.',
+    }
+    return render(request, 'portfolio_home.html', context)
+
+
 def predict_price(request):
     """
     Main view for house price prediction.

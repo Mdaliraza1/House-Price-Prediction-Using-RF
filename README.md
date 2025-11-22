@@ -1,15 +1,16 @@
-# House Price Prediction Web Application
+# Portfolio & House Price Prediction Web Application
 
-A Django-based web application that predicts house prices using machine learning models. The application provides an intuitive web interface where users can input property details and receive accurate price predictions.
+A Django-based portfolio website showcasing professional experience and projects, featuring a machine learning-powered house price prediction application. Built by **Md Ali Raza**, Python Backend Developer & ML Engineer.
 
 ## Features
 
-- 🏠 **Property Price Prediction**: Predict house prices based on various property features
-- 📊 **Machine Learning Model**: Uses trained ML models for accurate predictions
-- 🌐 **Web Interface**: User-friendly web form for inputting property details
+- 💼 **Portfolio Homepage**: Professional showcase with experience, skills, projects, and education
+- 🏠 **House Price Prediction**: ML-powered house price prediction based on property features
+- 📊 **Machine Learning Model**: Uses trained XGBoost models for accurate predictions
+- 🌐 **Modern Web Interface**: User-friendly navigation and responsive design
 - 💰 **Indian Currency Format**: Displays prices in Indian Rupees (₹) with proper formatting
 - ✅ **Input Validation**: Comprehensive validation for all input fields
-- 🎨 **Modern UI**: Clean and responsive design
+- 🎨 **Beautiful UI**: Clean, modern, and responsive design with gradient themes
 - ☁️ **AWS Ready**: Configured for deployment on AWS EC2 with CI/CD
 
 ## Technology Stack
@@ -148,8 +149,15 @@ ALLOWED_HOSTS=your-domain.com,www.your-domain.com
    ```
    http://127.0.0.1:8000/
    ```
+   
+   This will take you to the portfolio homepage.
 
-3. **Fill in the property details**:
+3. **Navigate to the ML Project** by clicking "ML Project" in the navigation or going to:
+   ```
+   http://127.0.0.1:8000/house-price-prediction/
+   ```
+
+4. **Fill in the property details**:
    - Number of Bedrooms
    - Number of Bathrooms
    - Living Area (sq ft)
@@ -159,7 +167,21 @@ ALLOWED_HOSTS=your-domain.com,www.your-domain.com
    - Latitude
    - Longitude
 
-4. **Click "Predict Price"** to get the estimated house price.
+5. **Click "Predict Price"** to get the estimated house price.
+
+## Portfolio Features
+
+The portfolio homepage showcases:
+- **Professional Profile**: Name, title, contact information, and links to GitHub and LinkedIn
+- **About Section**: Professional summary and aspirations
+- **Technical Skills**: Organized by categories (Languages, Frameworks, Databases, etc.)
+- **Experience**: Current and past work experience with detailed descriptions
+- **Featured Projects**: 
+  - House Price Prediction (Interactive ML Project)
+  - DailyIQ - Personal Analytics App
+  - Fixly - Local Service Provider Platform
+- **Education**: Academic background with CGPA details
+- **Certifications**: Professional certifications from HackerRank, Great Learning, etc.
 
 ## AWS Deployment
 
@@ -344,8 +366,9 @@ XGBoost was chosen for this project because:
 
 ## API Endpoints
 
-- `GET /`: Display the prediction form
-- `POST /`: Submit property details and receive prediction
+- `GET /`: Portfolio homepage
+- `GET /house-price-prediction/`: Display the prediction form
+- `POST /house-price-prediction/`: Submit property details and receive prediction
 
 ## Development
 

@@ -1,10 +1,46 @@
 {% extends 'base.html' %}
 
+{% block title %}House Price Prediction - ML Project{% endblock %}
+
+{% block extra_css %}
+<style>
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: white;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+    }
+
+    .breadcrumb a {
+        color: white;
+        text-decoration: none;
+        opacity: 0.9;
+        transition: opacity 0.3s ease;
+    }
+
+    .breadcrumb a:hover {
+        opacity: 1;
+        text-decoration: underline;
+    }
+
+    .breadcrumb-separator {
+        opacity: 0.7;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="hero-section">
-        <h2 class="hero-title">Predict Your House Price</h2>
-        <p class="hero-subtitle">Enter your property details below to get an accurate price prediction</p>
+        <div class="breadcrumb">
+            <a href="{% url 'myapp:portfolio_home' %}">Home</a>
+            <span class="breadcrumb-separator">›</span>
+            <span>House Price Prediction</span>
+        </div>
+        <h2 class="hero-title">🏠 Predict Your House Price</h2>
+        <p class="hero-subtitle">Enter your property details below to get an accurate price prediction powered by Machine Learning</p>
     </div>
 
     <div class="form-container">

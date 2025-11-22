@@ -1,0 +1,525 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ name }} - Portfolio{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Portfolio-specific styles */
+    .portfolio-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 4rem 0 3rem;
+        text-align: center;
+    }
+
+    .profile-section {
+        margin-bottom: 2rem;
+    }
+
+    .profile-name {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-title {
+        font-size: 1.5rem;
+        opacity: 0.95;
+        margin-bottom: 1.5rem;
+    }
+
+    .contact-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
+    }
+
+    .contact-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: white;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .contact-link:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .content-section {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin: 2rem auto;
+        max-width: 1200px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid #667eea;
+        display: inline-block;
+    }
+
+    .summary-text {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #4b5563;
+        margin-bottom: 2rem;
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .skill-category {
+        background: #f9fafb;
+        padding: 1.5rem;
+        border-radius: 15px;
+        border: 2px solid #e5e7eb;
+        transition: all 0.3s ease;
+    }
+
+    .skill-category:hover {
+        border-color: #667eea;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .skill-category-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 0.75rem;
+    }
+
+    .skill-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .skill-tag {
+        background: white;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: #4b5563;
+        border: 1px solid #e5e7eb;
+    }
+
+    .projects-section {
+        margin-top: 3rem;
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .project-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        color: white;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .project-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .project-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .project-description {
+        font-size: 1rem;
+        opacity: 0.95;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .project-tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .tech-badge {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 0.3rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: white;
+        color: #667eea;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        font-weight: 600;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .project-card:hover .cta-button {
+        background: #f9fafb;
+        transform: translateX(5px);
+    }
+
+    .experience-section {
+        margin-top: 2rem;
+    }
+
+    .experience-item {
+        background: #f9fafb;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid #667eea;
+    }
+
+    .experience-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .experience-role {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .experience-company {
+        color: #667eea;
+        font-weight: 500;
+    }
+
+    .experience-duration {
+        color: #6b7280;
+        font-size: 0.9rem;
+    }
+
+    .experience-description {
+        color: #4b5563;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+        .profile-name {
+            font-size: 2rem;
+        }
+
+        .profile-title {
+            font-size: 1.2rem;
+        }
+
+        .content-section {
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+        }
+
+        .contact-links {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .projects-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="portfolio-hero">
+    <div class="container">
+        <div class="profile-section">
+            <h1 class="profile-name">{{ name }}</h1>
+            <p class="profile-title">{{ title }}</p>
+            
+            <div class="contact-links">
+                <a href="mailto:{{ email }}" class="contact-link">
+                    <span>✉️</span>
+                    <span>{{ email }}</span>
+                </a>
+                <a href="tel:{{ phone }}" class="contact-link">
+                    <span>📱</span>
+                    <span>{{ phone }}</span>
+                </a>
+                <a href="https://github.com/{{ github }}" target="_blank" class="contact-link">
+                    <span>🔗</span>
+                    <span>GitHub</span>
+                </a>
+                <a href="https://linkedin.com/in/{{ linkedin }}" target="_blank" class="contact-link">
+                    <span>💼</span>
+                    <span>LinkedIn</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- About Section -->
+    <div class="content-section">
+        <h2 class="section-title">👨‍💻 About Me</h2>
+        <p class="summary-text">{{ summary }}</p>
+
+        <!-- Skills Section -->
+        <div class="skills-section">
+            <h3 class="section-title">🛠️ Technical Skills</h3>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4 class="skill-category-title">Languages</h4>
+                    <div class="skill-items">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Java</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4 class="skill-category-title">Frameworks</h4>
+                    <div class="skill-items">
+                        <span class="skill-tag">Django</span>
+                        <span class="skill-tag">Django REST Framework</span>
+                        <span class="skill-tag">Scikit-learn</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4 class="skill-category-title">Databases</h4>
+                    <div class="skill-items">
+                        <span class="skill-tag">PostgreSQL</span>
+                        <span class="skill-tag">SQLite</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4 class="skill-category-title">Cloud & DevOps</h4>
+                    <div class="skill-items">
+                        <span class="skill-tag">AWS (EC2, S3, RDS)</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">Git</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4 class="skill-category-title">Machine Learning</h4>
+                    <div class="skill-items">
+                        <span class="skill-tag">Feature Engineering</span>
+                        <span class="skill-tag">Model Training</span>
+                        <span class="skill-tag">Model Evaluation</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4 class="skill-category-title">Authentication</h4>
+                    <div class="skill-items">
+                        <span class="skill-tag">JWT</span>
+                        <span class="skill-tag">OTP Verification</span>
+                        <span class="skill-tag">Session-based Auth</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="experience-section">
+            <h3 class="section-title">💼 Experience</h3>
+            
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div>
+                        <div class="experience-role">Software Engineer</div>
+                        <div class="experience-company">Mayabious Art LLP, Kolkata</div>
+                    </div>
+                    <div class="experience-duration">Sep 2025 – Present</div>
+                </div>
+                <p class="experience-description">
+                    Developed ML-powered Risk Management Models, designed REST APIs for architecture/VR products, and integrated backend workflows with Unity/3D visualization pipelines.
+                </p>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div>
+                        <div class="experience-role">Python Backend Intern</div>
+                        <div class="experience-company">Whatbytes, Bangalore</div>
+                    </div>
+                    <div class="experience-duration">Feb 2025 – Aug 2025</div>
+                </div>
+                <p class="experience-description">
+                    Built DRF-based APIs for puzzle and analytics platform. Implemented OTP + JWT Authentication, ML-based puzzle difficulty logic, and collaborated on Flutter backend integration.
+                </p>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div>
+                        <div class="experience-role">Industrial Trainee</div>
+                        <div class="experience-company">Webskitters Academy Pvt Ltd, Kolkata</div>
+                    </div>
+                    <div class="experience-duration">Jan 2025 – Jun 2025</div>
+                </div>
+                <p class="experience-description">
+                    Hands-on training with Django, DRF, PostgreSQL, API development, deployments, and real-world backend workflows.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Section -->
+    <div class="content-section projects-section">
+        <h2 class="section-title">🚀 Featured Projects</h2>
+        
+        <div class="projects-grid">
+            <!-- House Price Prediction Project -->
+            <a href="{% url 'myapp:predict_price' %}" class="project-card">
+                <div class="project-icon">🏠</div>
+                <h3 class="project-name">House Price Prediction</h3>
+                <p class="project-description">
+                    ML-powered house price prediction system using Random Forest and OLS regression models with comprehensive EDA, VIF analysis, feature engineering, and outlier handling.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Django</span>
+                    <span class="tech-badge">Scikit-learn</span>
+                    <span class="tech-badge">Random Forest</span>
+                    <span class="tech-badge">Feature Engineering</span>
+                </div>
+                <div class="cta-button">
+                    Try It Now →
+                </div>
+            </a>
+
+            <!-- DailyIQ Project -->
+            <div class="project-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="project-icon">📊</div>
+                <h3 class="project-name">DailyIQ - Personal Analytics</h3>
+                <p class="project-description">
+                    Backend APIs and ML-based scoring algorithms for personal analytics and behavioral risk prediction with real-time insights.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Django REST Framework</span>
+                    <span class="tech-badge">Machine Learning</span>
+                    <span class="tech-badge">Analytics</span>
+                </div>
+                <div class="cta-button">
+                    View on Play Store →
+                </div>
+            </div>
+
+            <!-- Fixly Project -->
+            <div class="project-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="project-icon">🔧</div>
+                <h3 class="project-name">Fixly - Local Service Platform</h3>
+                <p class="project-description">
+                    Complete Django + DRF backend with dual-role authentication, service listings, user/provider dashboards, and real-time booking system.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Django</span>
+                    <span class="tech-badge">DRF</span>
+                    <span class="tech-badge">JWT Auth</span>
+                    <span class="tech-badge">PostgreSQL</span>
+                </div>
+                <div class="cta-button">
+                    View on GitHub →
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Education Section -->
+    <div class="content-section">
+        <h2 class="section-title">🎓 Education</h2>
+        
+        <div class="experience-item">
+            <div class="experience-header">
+                <div>
+                    <div class="experience-role">B.Tech in Computer Science & Engineering (Data Science)</div>
+                    <div class="experience-company">MCKV Institute of Engineering, Kolkata</div>
+                </div>
+                <div class="experience-duration">Aug 2022 – June 2025</div>
+            </div>
+            <p class="experience-description">CGPA: 7.52</p>
+        </div>
+
+        <div class="experience-item">
+            <div class="experience-header">
+                <div>
+                    <div class="experience-role">Diploma in Mechanical Engineering</div>
+                    <div class="experience-company">Calcutta Institute of Technology, Kolkata</div>
+                </div>
+                <div class="experience-duration">Aug 2019 – Jul 2022</div>
+            </div>
+            <p class="experience-description">CGPA: 7.8</p>
+        </div>
+    </div>
+
+    <!-- Certifications Section -->
+    <div class="content-section">
+        <h2 class="section-title">🏆 Certifications</h2>
+        
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h4 class="skill-category-title">🏅 Python (Basic)</h4>
+                <p style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">HackerRank - 2023</p>
+            </div>
+            <div class="skill-category">
+                <h4 class="skill-category-title">💻 Software Engineer</h4>
+                <p style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">HackerRank - 2023</p>
+            </div>
+            <div class="skill-category">
+                <h4 class="skill-category-title">📊 Data Science Foundation</h4>
+                <p style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">Great Learning - 2023</p>
+            </div>
+            <div class="skill-category">
+                <h4 class="skill-category-title">☕ Java Programmer</h4>
+                <p style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">2022</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

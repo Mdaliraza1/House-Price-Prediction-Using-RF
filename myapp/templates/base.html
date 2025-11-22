@@ -11,9 +11,10 @@
 <body>
     <header class="header">
         <div class="container">
-            <h1 class="logo">🏠 House Price Predictor</h1>
+            <h1 class="logo">💼 Md Ali Raza</h1>
             <nav class="nav">
-                <a href="/" class="nav-link">Home</a>
+                <a href="{% url 'myapp:portfolio_home' %}" class="nav-link">Home</a>
+                <a href="{% url 'myapp:predict_price' %}" class="nav-link">ML Project</a>
             </nav>
         </div>
     </header>
