@@ -341,7 +341,7 @@ select.form-input {
 }
 
 .footer-text::before {
-    content: "💻 ";
+    content: "";
     margin-right: 0.3rem;
 }
 
