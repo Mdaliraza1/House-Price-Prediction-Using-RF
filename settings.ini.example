@@ -8,8 +8,8 @@ SECRET_KEY=django-insecure-=6p*(+h-h144og6wol-9i+v-$_$_x=&vj*eml$(c45b@z8*fqi
 # Debug mode (True/False)
 DEBUG=True
 
-# Allowed hosts (comma-separated)
-ALLOWED_HOSTS=localhost,127.0.0.1
+# Allowed hosts (comma-separated or * for all)
+ALLOWED_HOSTS=*
 
 [PRODUCTION]
 ENVIRONMENT=production

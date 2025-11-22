@@ -44,14 +44,20 @@ jobs:
 
             # Create .env file with proper configuration
             echo "Creating/Updating .env file..."
-            cat > .env << 'EOL'
+            cat > .env << EOL
             DEBUG=True
             DJANGO_SETTINGS_MODULE=House_Price_Prediction.settings
             ALLOWED_HOSTS=*
             SECRET_KEY=django-insecure-production-key-$(openssl rand -hex 32)
             EOL
             
-            # Create settings.ini if it doesn't exist
+            # Backup existing settings.ini if it exists
+            if [ -f settings.ini ]; then
+              echo "Backing up existing settings.ini..."
+              cp settings.ini settings.ini.backup
+            fi
+            
+            # Create settings.ini from example if it doesn't exist
             if [ ! -f settings.ini ]; then
               echo "Creating settings.ini from example..."
               cp settings.ini.example settings.ini || echo "settings.ini.example not found, using defaults"

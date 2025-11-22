@@ -28,11 +28,12 @@ sudo journalctl --vacuum-time=1d 2>&1 || true
 echo "Disk space after cleanup:"
 df -h
 
-echo "Building containers (this may take a few minutes)..."
+echo "Building containers (using cache when possible)..."
 sudo docker-compose build 2>&1
 
-echo "Starting containers in detached mode..."
-sudo docker-compose up -d --force-recreate --remove-orphans 2>&1
+echo "Starting containers..."
+# Only recreate if needed (much faster on subsequent deploys)
+sudo docker-compose up -d --remove-orphans 2>&1
 
 echo "Waiting for application to initialize..."
 sleep 5
