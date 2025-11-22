@@ -1,17 +1,17 @@
-# Portfolio & House Price Prediction Web Application
+# Portfolio & House Price Prediction
 
-A Django-based portfolio website showcasing professional experience and projects, featuring a machine learning-powered house price prediction application. Built by **Md Ali Raza**, Python Backend Developer & ML Engineer.
+My personal portfolio website built with Django, featuring an interactive ML-powered house price prediction tool. This project combines my backend development skills with machine learning to create a practical, production-ready application.
 
-## Features
+Built by **Md Ali Raza** - Python Backend Developer & ML Engineer
 
-- 💼 **Portfolio Homepage**: Professional showcase with experience, skills, projects, and education
-- 🏠 **House Price Prediction**: ML-powered house price prediction based on property features
-- 📊 **Machine Learning Model**: Uses trained XGBoost models for accurate predictions
-- 🌐 **Modern Web Interface**: User-friendly navigation and responsive design
-- 💰 **Indian Currency Format**: Displays prices in Indian Rupees (₹) with proper formatting
-- ✅ **Input Validation**: Comprehensive validation for all input fields
-- 🎨 **Beautiful UI**: Clean, modern, and responsive design with gradient themes
-- ☁️ **AWS Ready**: Configured for deployment on AWS EC2 with CI/CD
+## What's Inside
+
+- **Portfolio Homepage** - My professional profile, skills, projects, and experience
+- **House Price Prediction Tool** - Interactive ML model that predicts property prices based on features like bedrooms, bathrooms, location, etc.
+- **XGBoost ML Model** - Trained on Indian real estate data with 87.6% R² score
+- **Responsive Design** - Works well on desktop and mobile
+- **Indian Currency Support** - Prices displayed in ₹ (Rupees) with proper formatting
+- **AWS Deployment** - Set up with CI/CD for automated deployments
 
 ## Technology Stack
 
@@ -30,13 +30,26 @@ House_Price_Prediction/
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-├── myapp/                      # Main application
-│   ├── views.py               # View logic
+├── portfolio/                  # Portfolio application
+│   ├── views.py               # Portfolio views
+│   ├── urls.py                # Portfolio URL routing
+│   └── apps.py
+├── price_prediction/           # Price prediction application
+│   ├── views.py               # Prediction view logic
 │   ├── utils.py               # ML model utilities
-│   ├── templates/             # HTML templates
-│   │   ├── base.html
-│   │   └── predict.html
-│   └── static/                # Static files (CSS, JS)
+│   ├── urls.py                # Prediction URL routing
+│   └── apps.py
+├── templates/                  # Centralized templates
+│   ├── base.html              # Shared base template
+│   ├── portfolio/
+│   │   └── home.html          # Portfolio homepage
+│   └── price_prediction/
+│       └── predict.html        # Price prediction form
+├── static/                     # Centralized static files
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── main.js
 ├── ML_Files/                  # Machine learning artifacts
 │   ├── best_house_price_model.pkl
 │   ├── model_features.pkl
@@ -57,7 +70,7 @@ House_Price_Prediction/
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+You'll need:
 
 - Python 3.8 or higher
 - pip (Python package manager)
@@ -66,8 +79,9 @@ Before you begin, ensure you have the following installed:
 
 ## Installation
 
-1. **Clone the repository** (or navigate to the project directory):
+1. **Clone or download the repository**:
    ```bash
+   git clone https://github.com/Mdaliraza1/House-Price-Prediction-Using-RF/
    cd House_Price_Prediction
    ```
 
@@ -169,17 +183,17 @@ ALLOWED_HOSTS=your-domain.com,www.your-domain.com
 
 5. **Click "Predict Price"** to get the estimated house price.
 
-## Portfolio Features
+## Portfolio Section
 
-The portfolio homepage showcases:
-- **Professional Profile**: Name, title, contact information, and links to GitHub and LinkedIn
+The homepage includes:
+- **Professional Profile**: Name, title, contact information, and links to [GitHub](https://github.com/Mdaliraza1/) and [LinkedIn](https://www.linkedin.com/in/Mdaliraza1)
 - **About Section**: Professional summary and aspirations
 - **Technical Skills**: Organized by categories (Languages, Frameworks, Databases, etc.)
 - **Experience**: Current and past work experience with detailed descriptions
 - **Featured Projects**: 
   - House Price Prediction (Interactive ML Project)
-  - DailyIQ - Personal Analytics App
-  - Fixly - Local Service Provider Platform
+  - [DailyIQ](https://play.google.com/store/apps/details?id=com.dailyiq) - Personal Analytics App (Available on Google Play Store)
+  - [Fixly](https://github.com/Mdaliraza1/fixly_webskitters) - Local Service Provider Platform ([Postman Collection](https://ali-9080809.postman.co/workspace/Ali's-Workspace~b606f152-10e6-43e2-8d46-2422cfcf3eec/collection/44342859-2398419f-da83-43e4-b1f1-d388917d6438?action=share&creator=44342859&active-environment=44342859-f192b90e-2e1f-4122-9025-bef1dc589df7))
 - **Education**: Academic background with CGPA details
 - **Certifications**: Professional certifications from HackerRank, Great Learning, etc.
 
@@ -196,7 +210,7 @@ The portfolio homepage showcases:
 
 3. **Clone this repository**:
    ```bash
-   git clone <your-repo-url> /var/www/house-price-prediction
+   git clone https://github.com/Mdaliraza1/House-Price-Prediction-Using-RF.git /var/www/house-price-prediction
    ```
 
 4. **Run the setup script**:
@@ -252,11 +266,9 @@ python manage.py migrate
 sudo systemctl restart house-price-prediction
 ```
 
-## Model Implementation Details
+## ML Model Details
 
-### Model Architecture
-
-The application uses a **XGBoost Regressor** model trained on Indian house price data. The model was developed through a comprehensive machine learning pipeline:
+I built an XGBoost regression model trained on Indian real estate data. Here's how it works:
 
 #### 1. **Model Type**
 - **Algorithm**: XGBoost (Extreme Gradient Boosting) Regressor
@@ -272,7 +284,7 @@ The application uses a **XGBoost Regressor** model trained on Indian house price
 
 #### 2. **Feature Engineering**
 
-The model uses **13 carefully selected features** that combine raw inputs with engineered features:
+The model uses 13 features - a mix of raw inputs and some I engineered:
 
 **Raw Features (8):**
 - `number of bedrooms`: Integer count of bedrooms
@@ -291,9 +303,9 @@ The model uses **13 carefully selected features** that combine raw inputs with e
 - `lot_per_living`: Lot area divided by (living area + 1)
 - `lat_x_lon`: Geographic interaction feature (latitude × longitude)
 
-#### 3. **Feature Selection Process**
+#### 3. **How I Selected Features**
 
-The final 13 features were selected through a rigorous process:
+I went through several steps to pick the best features:
 - **Exploratory Data Analysis (EDA)**: Understanding data distributions and correlations
 - **VIF Analysis**: Variance Inflation Factor to detect multicollinearity
 - **OLS Regression**: Statistical significance testing (p-values)
@@ -308,7 +320,7 @@ The final 13 features were selected through a rigorous process:
 
 #### 5. **Model Performance**
 
-The model achieves the following performance metrics on the test set:
+Here's how the model performs:
 - **Mean Absolute Error (MAE)**: ₹1,831,344.5
 - **Mean Absolute Percentage Error (MAPE)**: 14.05%
 - **R² Score**: 0.876 (87.6% variance explained)
@@ -346,7 +358,7 @@ The application implements model caching to improve performance:
 
 ### Why XGBoost?
 
-XGBoost was chosen for this project because:
+I chose XGBoost because:
 - **High Performance**: Excellent predictive accuracy for regression tasks
 - **Feature Interactions**: Automatically captures non-linear relationships
 - **Robustness**: Handles missing values and outliers well
@@ -366,9 +378,34 @@ XGBoost was chosen for this project because:
 
 ## API Endpoints
 
-- `GET /`: Portfolio homepage
-- `GET /house-price-prediction/`: Display the prediction form
-- `POST /house-price-prediction/`: Submit property details and receive prediction
+- `GET /`: Portfolio homepage (handled by `portfolio` app)
+- `GET /house-price-prediction/`: Display the prediction form (handled by `price_prediction` app)
+- `POST /house-price-prediction/`: Submit property details and receive prediction (handled by `price_prediction` app)
+
+## Application Architecture
+
+The project is organized into two main Django applications:
+
+### Portfolio App (`portfolio/`)
+- **Purpose**: Displays professional portfolio, skills, experience, and projects
+- **Views**: `portfolio_home` - Renders the portfolio homepage
+- **Templates**: `templates/portfolio/home.html`
+- **URLs**: Root path (`/`)
+
+### Price Prediction App (`price_prediction/`)
+- **Purpose**: Handles house price prediction using ML models
+- **Views**: `predict_price` - Handles GET (form display) and POST (prediction) requests
+- **Utilities**: `utils.py` - Contains ML model loading and prediction logic
+- **Templates**: `templates/price_prediction/predict.html`
+- **URLs**: `/house-price-prediction/`
+
+### Shared Resources
+- **Templates**: All templates are centralized in the `templates/` directory at the project root
+  - `base.html` - Shared base template with navigation and footer
+- **Static Files**: All CSS and JavaScript files are centralized in the `static/` directory at the project root
+
+**Why this structure?**
+I separated the portfolio and price prediction into different apps to keep things organized. All templates and static files are in one place at the project root, which makes it easier to maintain and add new features later.
 
 ## Development
 
@@ -405,12 +442,14 @@ Navigate to `http://127.0.0.1:8000/admin/` after creating a superuser.
 
 ## License
 
-This project is open source and available for educational purposes.
+Open source - feel free to use this for learning or as a reference.
 
-## Contributing
+## Questions?
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+If you have questions or find any issues, feel free to [open an issue](https://github.com/Mdaliraza1/House-Price-Prediction-Using-RF/issues) or reach out!
 
-## Contact
+## Connect With Me
 
-For questions or issues, please open an issue on the repository.
+- **GitHub**: [@Mdaliraza1](https://github.com/Mdaliraza1/)
+- **LinkedIn**: [Md Ali Raza](https://www.linkedin.com/in/Mdaliraza1)
+- **Email**: mdaliraza92@gmail.com
