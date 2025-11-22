@@ -7,4 +7,4 @@ echo "Starting Django application..."
 python manage.py migrate
 
 # Start Gunicorn
-gunicorn --bind 0.0.0.0:8000 core.wsgi:application --workers 3
+gunicorn --bind 0.0.0.0:8000 House_Price_Prediction.wsgi:application --workers 3
