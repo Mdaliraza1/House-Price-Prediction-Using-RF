@@ -193,7 +193,7 @@ The homepage includes:
 - **Featured Projects**: 
   - House Price Prediction (Interactive ML Project)
   - [DailyIQ](https://play.google.com/store/apps/details?id=com.dailyiq) - Personal Analytics App (Available on Google Play Store)
-  - [Fixly](https://github.com/Mdaliraza1/fixly_webskitters) - Local Service Provider Platform ([Postman Collection](https://ali-9080809.postman.co/workspace/Ali's-Workspace~b606f152-10e6-43e2-8d46-2422cfcf3eec/collection/44342859-2398419f-da83-43e4-b1f1-d388917d6438?action=share&creator=44342859&active-environment=44342859-f192b90e-2e1f-4122-9025-bef1dc589df7))
+  - [Fixly](https://github.com/Mdaliraza1/fixly_webskitters) - Local Service Provider Platform ([Postman Collection](https://documenter.getpostman.com/view/44342859/2sB2j7eVGw))
 - **Education**: Academic background with CGPA details
 - **Certifications**: Professional certifications from HackerRank, Great Learning, etc.
 
