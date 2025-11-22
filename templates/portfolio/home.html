@@ -6,7 +6,7 @@
 {% block extra_css %}
 <style>
     /* Haven Church Inspired Design - Dark Theme with Orange Accents */
-    
+
     :root {
         --dark-bg: #0a0a0a;
         --dark-surface: #141414;
@@ -23,7 +23,7 @@
     /* Override base styles for dark theme */
     body {
         background: #0a0a0a !important;
-        background-image: 
+        background-image:
             radial-gradient(ellipse 100% 80% at 25% 35%, rgba(255, 107, 53, 0.35) 0%, rgba(255, 107, 53, 0.25) 25%, rgba(255, 107, 53, 0.15) 45%, transparent 75%),
             radial-gradient(ellipse 70% 60% at 20% 50%, rgba(255, 107, 53, 0.2) 0%, transparent 60%),
             linear-gradient(180deg, #0a0a0a 0%, #0a0a0a 100%) !important;
@@ -749,6 +749,7 @@
             opacity: 0;
             transform: translateY(40px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -760,6 +761,7 @@
             opacity: 0;
             transform: translateX(-30px);
         }
+
         to {
             opacity: 1;
             transform: translateX(0);
@@ -767,9 +769,12 @@
     }
 
     @keyframes pulse {
-        0%, 100% {
+
+        0%,
+        100% {
             opacity: 1;
         }
+
         50% {
             opacity: 0.7;
         }
@@ -849,13 +854,13 @@
 
 <script>
     // Scroll-triggered animations using Intersection Observer
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
 
-        const observer = new IntersectionObserver(function(entries) {
+        const observer = new IntersectionObserver(function (entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
@@ -895,11 +900,12 @@
         <div class="profile-section">
             <h1 class="profile-name">{{ name }}</h1>
             <p class="profile-title">{{ title }}</p>
-            
+
             <p class="hero-summary">{{ summary }}</p>
-            
+
             <div class="contact-links">
-                <a href="mailto:{{ email }}?subject=Hello%20from%20your%20Portfolio" class="contact-link" title="Send me an email">
+                <a href="mailto:{{ email }}?subject=Hello%20from%20your%20Portfolio" class="contact-link"
+                    title="Send me an email">
                     <span>✉️</span>
                     <span>{{ email }}</span>
                 </a>
@@ -907,11 +913,13 @@
                     <span>📱</span>
                     <span>{{ phone }}</span>
                 </a>
-                <a href="https://github.com/{{ github }}" target="_blank" rel="noopener noreferrer" class="contact-link" title="Visit my GitHub">
+                <a href="https://github.com/{{ github }}" target="_blank" rel="noopener noreferrer" class="contact-link"
+                    title="Visit my GitHub">
                     <span>🔗</span>
                     <span>GitHub</span>
                 </a>
-                <a href="https://www.linkedin.com/in/{{ linkedin }}" target="_blank" rel="noopener noreferrer" class="contact-link" title="Connect on LinkedIn">
+                <a href="https://www.linkedin.com/in/{{ linkedin }}" target="_blank" rel="noopener noreferrer"
+                    class="contact-link" title="Connect on LinkedIn">
                     <span>💼</span>
                     <span>LinkedIn</span>
                 </a>
@@ -984,7 +992,7 @@
         <div class="experience-section" style="margin-top: 5rem;">
             <span class="section-label">Experience</span>
             <h2 class="section-title">Professional Journey</h2>
-            
+
             <div class="experience-item">
                 <div class="experience-header">
                     <div>
@@ -1007,7 +1015,8 @@
                     <div class="experience-duration">May 2025 – Oct 2025</div>
                 </div>
                 <p class="experience-description">
-                    Built DRF-based APIs for puzzle and analytics platform. Implemented OTP + JWT Authentication, ML-based puzzle difficulty logic, and collaborated on Flutter backend integration.
+                    Built DRF-based APIs for puzzle and analytics platform. Implemented OTP + JWT Authentication,
+                    ML-based puzzle difficulty logic, and collaborated on Flutter backend integration.
                 </p>
             </div>
 
@@ -1020,7 +1029,8 @@
                     <div class="experience-duration">Jan 2025 – Jun 2025</div>
                 </div>
                 <p class="experience-description">
-                    Hands-on training with Django, DRF, PostgreSQL, API development, deployments, and real-world backend workflows.
+                    Hands-on training with Django, DRF, PostgreSQL, API development, deployments, and real-world backend
+                    workflows.
                 </p>
             </div>
         </div>
@@ -1030,14 +1040,15 @@
     <div class="content-section projects-section">
         <span class="section-label">Projects</span>
         <h2 class="section-title">Featured Work</h2>
-        
+
         <div class="projects-grid">
             <!-- House Price Prediction Project -->
             <a href="{% url 'price_prediction:predict' %}" class="project-card">
                 <div class="project-icon">🏠</div>
                 <h3 class="project-name">House Price Prediction</h3>
                 <p class="project-description">
-                    ML-powered house price prediction system using XGBoost with comprehensive EDA, feature engineering, and production-ready Django integration.
+                    ML-powered house price prediction system using XGBoost with comprehensive EDA, feature engineering,
+                    and production-ready Django integration.
                 </p>
                 <div class="project-tech">
                     <span class="tech-badge">Django</span>
@@ -1051,14 +1062,18 @@
             </a>
 
             <!-- DailyIQ Project -->
-            <a href="https://play.google.com/store/apps/details?id=com.dailyiq" target="_blank" rel="noopener noreferrer" class="project-card">
+            <a href="https://play.google.com/store/apps/details?id=com.dailyiq" target="_blank"
+                rel="noopener noreferrer" class="project-card">
                 <div class="project-icon">
-                    <img src="{% static 'images/Screenshot_2025-11-22_151813-removebg-preview-removebg-preview.png' %}" alt="DailyIQ Logo" class="project-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+                    <img src="{% static 'images/Screenshot_2025-11-22_151813-removebg-preview-removebg-preview.png' %}"
+                        alt="DailyIQ Logo" class="project-logo-img"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
                     <span style="display: none;">📊</span>
                 </div>
                 <h3 class="project-name">DailyIQ - Daily Brain Booster App</h3>
                 <p class="project-description">
-                    Backend APIs and ML-based scoring algorithms for daily brain boost app with recommendations as per user's performance and metrics. Social Media Integration for sharing Posts.
+                    Backend APIs and ML-based scoring algorithms for daily brain boost app with recommendations as per
+                    user's performance and metrics. Social Media Integration for sharing Posts.
                 </p>
                 <div class="project-tech">
                     <span class="tech-badge">Django REST Framework</span>
@@ -1072,11 +1087,14 @@
             </a>
 
             <!-- Fixly Project -->
-            <div class="project-card" style="cursor: default;">
+            <div class="project-card"
+                onclick="window.open('https://github.com/Mdaliraza1/fixly_webskitters', '_blank', 'noopener,noreferrer');"
+                style="cursor: pointer;">
                 <div class="project-icon">🔧</div>
                 <h3 class="project-name">Fixly - Local Service Platform</h3>
                 <p class="project-description">
-                    Complete Django + DRF backend with dual-role authentication, service listings, user/provider dashboards, and real-time booking system.
+                    Complete Django + DRF backend with dual-role authentication, service listings, user/provider
+                    dashboards, and real-time booking system.
                 </p>
                 <div class="project-tech">
                     <span class="tech-badge">Django</span>
@@ -1085,8 +1103,11 @@
                     <span class="tech-badge">PostgreSQL</span>
                 </div>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
-                    <a href="https://github.com/Mdaliraza1/fixly_webskitters" target="_blank" rel="noopener noreferrer" class="cta-button" style="color: var(--text-white); text-decoration: none;">View on GitHub →</a>
-                    <a href="https://ali-9080809.postman.co/workspace/Ali's-Workspace~b606f152-10e6-43e2-8d46-2422cfcf3eec/collection/44342859-2398419f-da83-43e4-b1f1-d388917d6438?action=share&creator=44342859&active-environment=44342859-f192b90e-2e1f-4122-9025-bef1dc589df7" target="_blank" rel="noopener noreferrer" class="cta-button" style="color: var(--text-white); text-decoration: none;">Postman Collection →</a>
+                    <a href="https://github.com/Mdaliraza1/fixly_webskitters" target="_blank" rel="noopener noreferrer" class="cta-button" style="color: var(--text-white); text-decoration: none; position: relative; z-index: 10;" onclick="event.stopPropagation();">View on GitHub →</a>
+                    <a href="https://documenter.getpostman.com/view/44342859/2sB2j7eVGw" target="_blank"
+                        rel="noopener noreferrer" class="cta-button"
+                        style="color: var(--text-white); text-decoration: none; position: relative; z-index: 10;"
+                        onclick="event.stopPropagation();">Postman Documentation →</a>
                 </div>
             </div>
         </div>
@@ -1096,7 +1117,7 @@
     <div class="content-section">
         <span class="section-label">Education</span>
         <h2 class="section-title">Academic Background</h2>
-        
+
         <div class="experience-item">
             <div class="experience-header">
                 <div>
@@ -1124,7 +1145,7 @@
     <div class="content-section">
         <span class="section-label">Certifications</span>
         <h2 class="section-title">Professional Certifications</h2>
-        
+
         <div class="cert-grid">
             <div class="cert-item">
                 <h4 class="cert-title">Python (Basic)</h4>
