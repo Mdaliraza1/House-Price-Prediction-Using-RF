@@ -285,19 +285,19 @@
             <p class="profile-title">{{ title }}</p>
             
             <div class="contact-links">
-                <a href="mailto:{{ email }}" class="contact-link">
+                <a href="mailto:{{ email }}?subject=Hello%20from%20your%20Portfolio" class="contact-link" title="Send me an email">
                     <span>✉️</span>
                     <span>{{ email }}</span>
                 </a>
-                <a href="tel:{{ phone }}" class="contact-link">
+                <a href="tel:{{ phone }}" class="contact-link" title="Call me">
                     <span>📱</span>
                     <span>{{ phone }}</span>
                 </a>
-                <a href="https://github.com/{{ github }}" target="_blank" class="contact-link">
+                <a href="https://github.com/{{ github }}" target="_blank" rel="noopener noreferrer" class="contact-link" title="Visit my GitHub">
                     <span>🔗</span>
                     <span>GitHub</span>
                 </a>
-                <a href="https://linkedin.com/in/{{ linkedin }}" target="_blank" class="contact-link">
+                <a href="https://linkedin.com/in/{{ linkedin }}" target="_blank" rel="noopener noreferrer" class="contact-link" title="Connect on LinkedIn">
                     <span>💼</span>
                     <span>LinkedIn</span>
                 </a>
