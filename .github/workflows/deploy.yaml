@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -19,17 +20,21 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo "📁 Moving to project directory..."
             cd ~/House_Price_Prediction
-              git pull origin main 
-            # Pulling latest changes....
+
+            echo "🔄 Resetting and pulling latest code..."
+            git reset --hard HEAD
             git pull origin main
 
-            # Install Docker if not already installed
+            echo "🐳 Checking Docker installation..."
             if ! docker info &> /dev/null; then
               sudo chmod +x .scripts/install-docker.sh
               .scripts/install-docker.sh
             fi
 
-            # Running docker-compose up / down...
+            echo "🚀 Running Docker deployment..."
             sudo chmod +x .scripts/start-docker.sh
             .scripts/start-docker.sh
+
+            echo "✅ Deployment completed successfully!"
