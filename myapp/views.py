@@ -18,7 +18,7 @@ def portfolio_home(request):
         'linkedin': 'mdaliraza1',
         'summary': 'Aspiring Python backend developer and Computer Science undergraduate with hands-on experience in Django, Django REST Framework (DRF), Machine Learning workflows, and scalable API development.',
     }
-    return render(request, 'portfolio_home.html', context)
+    return render(request, 'portfolio/home.html', context)
 
 
 def predict_price(request):
@@ -93,7 +93,7 @@ def predict_price(request):
         'error_message': error_message,
     }
     
-    return render(request, 'predict.html', context)
+    return render(request, 'house_prediction/predict.html', context)
 
 
 def format_price(price):
