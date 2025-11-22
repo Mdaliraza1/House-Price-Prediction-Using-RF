@@ -1,17 +1,16 @@
 #!/bin/bash
 set -e
 
-echo "removing all running containers..."
+echo "Removing existing containers..."
 docker-compose down --remove-orphans -v
 
-echo "starting all containers again..."
-# Build and start the containers in detached mode
+echo "Building and starting containers..."
 docker-compose up --build -d
 
-# Restart services
-echo "Restarting services..."
-sudo systemctl restart gunicorn
-sudo systemctl restart nginx
+echo "Waiting for containers to stabilize..."
+sleep 3
 
-echo "Deployment completed successfully!"
-echo "All containers started successfully."
+echo "Checking container logs..."
+docker-compose logs --tail=20
+
+echo "✔ Deployment completed successfully (using Docker only)"
