@@ -13,13 +13,13 @@
 <body>
     <header class="header">
         <div class="container">
-            <h1 class="logo">Md Ali Raza</h1>
+            <h1 class="logo">House Price Prediction</h1>
             <nav class="nav">
-                <a href="{% url 'portfolio:home' %}"
+                <!-- <a href="{% url 'portfolio:home' %}"
                     class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+                -->
                 <a href="{% url 'price_prediction:predict' %}"
-                    class="nav-link {% if request.resolver_match.app_name == 'price_prediction' %}active{% endif %}">ML
-                    Project</a>
+                    class="nav-link {% if request.resolver_match.app_name == 'price_prediction' %}active{% endif %}">Predict Price</a>
             </nav>
         </div>
     </header>
@@ -27,7 +27,7 @@
     <main class="main-content">
         {% block content %}{% endblock %}
     </main>
-
+<!--
     <footer class="footer">
         <div class="container">
             <p class="footer-text">&copy; 2025 Md Ali Raza — Backend & ML Engineer • Django • DRF • PostgreSQL • AWS •
@@ -52,7 +52,7 @@
             </div>
         </div>
     </footer>
-
+-->
     {% load static %}
     <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
