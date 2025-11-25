@@ -200,7 +200,7 @@ The homepage includes:
 ## AWS Deployment
 
 ### Initial Setup on EC2
-
+PR Bot review test
 1. **Launch an EC2 instance** (Ubuntu 22.04 LTS recommended)
 
 2. **SSH into your instance**:
