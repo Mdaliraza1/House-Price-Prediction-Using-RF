@@ -158,3 +158,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Google Maps API Key
+GOOGLE_MAPS_API_KEY = get_setting(ENV, 'GOOGLE_MAPS_API_KEY', 
+    default=os.environ.get('GOOGLE_MAPS_API_KEY', ''))

@@ -44,15 +44,74 @@
     </div>
 
     <div class="form-container">
-        <form method="POST" id="predictionForm" class="prediction-form">
+        <form method="POST" id="predictionForm" class="prediction-form" novalidate>
             {% csrf_token %}
             
-            <div class="form-grid">
+            <!-- Map Section: Full Width at Top -->
+                <div class="form-group location-picker-group">
+                <label class="form-label" for="mapContainer">
+                    <span class="label-icon" aria-hidden="true">📍</span>
+                        Property Location
+                    <span class="required-indicator" aria-label="required">*</span>
+                    </label>
+                <div class="location-search-wrapper">
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="locationSearch" 
+                            class="location-search-input form-input" 
+                            placeholder="Search for an address or place..."
+                            autocomplete="off"
+                            aria-label="Search for property location"
+                        >
+                        <span class="search-icon" aria-hidden="true">🔍</span>
+                    </div>
+                </div>
+                    <div class="location-picker-controls">
+                    <button 
+                        type="button" 
+                        id="locateMeBtn" 
+                        class="btn-locate-me" 
+                        disabled
+                        aria-label="Use your current location"
+                    >
+                        <span class="btn-locate-icon" aria-hidden="true">📍</span>
+                            <span class="btn-locate-text">Locate Me</span>
+                        <span class="btn-locate-spinner" style="display: none;" aria-hidden="true"></span>
+                        </button>
+                    <button 
+                        type="button" 
+                        id="clearLocationBtn" 
+                        class="btn-clear-location" 
+                        style="display: none;"
+                        aria-label="Clear selected location"
+                    >
+                        <span aria-hidden="true">✕</span>
+                        <span class="btn-clear-text">Clear</span>
+                    </button>
+                    <div id="locationStatus" class="location-status" role="status" aria-live="polite"></div>
+                    </div>
+                <div id="mapContainer" class="map-container" role="application" aria-label="Interactive map for selecting property location">
+                        <div id="mapLoading" class="map-loading">
+                            <div class="loading-spinner"></div>
+                            <p>Loading map...</p>
+                        </div>
+                    </div>
+                <p class="map-instruction" id="mapInstruction">Click on the map or drag the pin to set your property location</p>
+                    <!-- Hidden fields for form submission -->
+                <input type="hidden" id="latitude" name="latitude" required aria-label="Latitude">
+                <input type="hidden" id="longitude" name="longitude" required aria-label="Longitude">
+                </div>
+
+            <!-- Form Fields: Two Columns Below Map -->
+            <div class="form-fields-grid">
                 <div class="form-group">
                     <label for="bedrooms" class="form-label">
-                        <span class="label-icon">🛏️</span>
+                                <span class="label-icon" aria-hidden="true">🛏️</span>
                         Number of Bedrooms
+                                <span class="required-indicator" aria-label="required">*</span>
                     </label>
+                            <div class="input-wrapper">
                     <input 
                         type="number" 
                         id="bedrooms" 
@@ -62,14 +121,23 @@
                         max="10" 
                         required
                         placeholder="e.g., 3"
+                                    aria-describedby="bedrooms-tooltip"
+                                    aria-invalid="false"
                     >
+                                <span class="input-success-icon" aria-hidden="true">✓</span>
+                                <div class="input-tooltip" id="bedrooms-tooltip" role="tooltip">
+                                    Enter the number of bedrooms in the property (1-10)
+                                </div>
+                            </div>
                 </div>
 
                 <div class="form-group">
                     <label for="bathrooms" class="form-label">
-                        <span class="label-icon">🚿</span>
+                                <span class="label-icon" aria-hidden="true">🚿</span>
                         Number of Bathrooms
+                                <span class="required-indicator" aria-label="required">*</span>
                     </label>
+                            <div class="input-wrapper">
                     <input 
                         type="number" 
                         id="bathrooms" 
@@ -80,14 +148,23 @@
                         step="0.5"
                         required
                         placeholder="e.g., 2.5"
+                                    aria-describedby="bathrooms-tooltip"
+                                    aria-invalid="false"
                     >
+                                <span class="input-success-icon" aria-hidden="true">✓</span>
+                                <div class="input-tooltip" id="bathrooms-tooltip" role="tooltip">
+                                    Enter the number of bathrooms (can include half baths like 2.5)
+                                </div>
+                            </div>
                 </div>
 
                 <div class="form-group">
                     <label for="living_area" class="form-label">
-                        <span class="label-icon">📐</span>
+                                <span class="label-icon" aria-hidden="true">📐</span>
                         Living Area (sq ft)
+                                <span class="required-indicator" aria-label="required">*</span>
                     </label>
+                            <div class="input-wrapper">
                     <input 
                         type="number" 
                         id="living_area" 
@@ -96,14 +173,23 @@
                         min="100" 
                         required
                         placeholder="e.g., 1200"
+                                    aria-describedby="living_area-tooltip"
+                                    aria-invalid="false"
                     >
+                                <span class="input-success-icon" aria-hidden="true">✓</span>
+                                <div class="input-tooltip" id="living_area-tooltip" role="tooltip">
+                                    Total interior living space in square feet
+                                </div>
+                            </div>
                 </div>
 
                 <div class="form-group">
                     <label for="lot_area" class="form-label">
-                        <span class="label-icon">🏞️</span>
+                                <span class="label-icon" aria-hidden="true">🏞️</span>
                         Lot Area (sq ft)
+                                <span class="required-indicator" aria-label="required">*</span>
                     </label>
+                            <div class="input-wrapper">
                     <input 
                         type="number" 
                         id="lot_area" 
@@ -112,14 +198,23 @@
                         min="100" 
                         required
                         placeholder="e.g., 2000"
+                                    aria-describedby="lot_area-tooltip"
+                                    aria-invalid="false"
                     >
+                                <span class="input-success-icon" aria-hidden="true">✓</span>
+                                <div class="input-tooltip" id="lot_area-tooltip" role="tooltip">
+                                    Total land area including yard and outdoor space
+                                </div>
+                            </div>
                 </div>
 
                 <div class="form-group">
                     <label for="floor" class="form-label">
-                        <span class="label-icon">🏢</span>
+                                <span class="label-icon" aria-hidden="true">🏢</span>
                         Floor Number
+                                <span class="required-indicator" aria-label="required">*</span>
                     </label>
+                            <div class="input-wrapper">
                     <input 
                         type="number" 
                         id="floor" 
@@ -129,63 +224,43 @@
                         max="50"
                         required
                         placeholder="e.g., 2"
+                                    aria-describedby="floor-tooltip"
+                                    aria-invalid="false"
                     >
+                                <span class="input-success-icon" aria-hidden="true">✓</span>
+                                <div class="input-tooltip" id="floor-tooltip" role="tooltip">
+                                    Floor number (0 for ground floor, 1+ for upper floors)
+                                </div>
+                            </div>
                 </div>
 
                 <div class="form-group">
                     <label for="property_type" class="form-label">
-                        <span class="label-icon">🏘️</span>
+                                <span class="label-icon" aria-hidden="true">🏘️</span>
                         Property Type
+                                <span class="required-indicator" aria-label="required">*</span>
                     </label>
+                            <div class="input-wrapper">
                     <select 
                         id="property_type" 
                         name="property_type" 
                         class="form-input" 
                         required
+                                    aria-describedby="property_type-tooltip"
+                                    aria-invalid="false"
                     >
                         <option value="">Select Property Type</option>
                         {% for prop_type in property_types %}
                         <option value="{{ prop_type }}">{{ prop_type }}</option>
                         {% endfor %}
                     </select>
+                                <span class="input-success-icon" aria-hidden="true">✓</span>
+                                <div class="input-tooltip" id="property_type-tooltip" role="tooltip">
+                                    Select the type of property (apartment, house, etc.)
+                                </div>
+                            </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="latitude" class="form-label">
-                        <span class="label-icon">📍</span>
-                        Latitude
-                    </label>
-                    <input 
-                        type="number" 
-                        id="latitude" 
-                        name="latitude" 
-                        class="form-input" 
-                        min="-90" 
-                        max="90" 
-                        step="0.000001"
-                        required
-                        placeholder="e.g., 28.4595"
-                    >
                 </div>
-
-                <div class="form-group">
-                    <label for="longitude" class="form-label">
-                        <span class="label-icon">🌐</span>
-                        Longitude
-                    </label>
-                    <input 
-                        type="number" 
-                        id="longitude" 
-                        name="longitude" 
-                        class="form-input" 
-                        min="-180" 
-                        max="180" 
-                        step="0.000001"
-                        required
-                        placeholder="e.g., 77.0266"
-                    >
-                </div>
-            </div>
 
             <div class="form-actions">
                 <button type="submit" class="btn-submit" id="submitBtn">
@@ -216,8 +291,59 @@
                 </div>
             </div>
         </div>
-        {% endif %}
+
+        <!-- Nearby Amenities Section -->
+        <div class="amenities-card" id="amenitiesCard" style="display: none;" 
+             data-latitude="{{ prediction.latitude }}" 
+             data-longitude="{{ prediction.longitude }}">
+            <div class="amenities-header">
+                <h3 class="amenities-title">📍 Nearby Amenities</h3>
+                <div class="amenities-loading" id="amenitiesLoading">
+                    <div class="loading-spinner"></div>
+                    <p>Finding nearby amenities...</p>
     </div>
 </div>
+            <div class="amenities-content" id="amenitiesContent" style="display: none;">
+                <div class="amenities-grid" id="amenitiesGrid">
+                    <!-- Amenities will be populated by JavaScript -->
+                </div>
+            </div>
+</div>
+{% endif %}
+    </div>
+</div>
+
+{% if google_maps_api_key %}
+    {# Load map.js before Google Maps API so initMapPicker is defined #}
+    {% load static %}
+    <script src="{% static 'js/map.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&loading=async&callback=initMapPicker" async defer></script>
+{% else %}
+    <div class="alert alert-error" style="margin-top: 1rem;">
+        <span class="alert-icon">⚠️</span>
+        <span class="alert-message">Google Maps API key is not configured. Please add GOOGLE_MAPS_API_KEY to your settings.ini file.</span>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    {# Load amenities.js for nearby amenities functionality #}
+    {% load static %}
+    <script src="{% static 'js/amenities.js' %}"></script>
+    
+    {# Initialize amenities search when prediction is displayed #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const amenitiesCard = document.getElementById('amenitiesCard');
+            if (amenitiesCard) {
+                const propertyLatitude = parseFloat(amenitiesCard.getAttribute('data-latitude'));
+                const propertyLongitude = parseFloat(amenitiesCard.getAttribute('data-longitude'));
+                
+                if (!isNaN(propertyLatitude) && !isNaN(propertyLongitude)) {
+                    initAmenitiesSearch(propertyLatitude, propertyLongitude);
+                }
+            }
+        });
+    </script>
 {% endblock %}
 
