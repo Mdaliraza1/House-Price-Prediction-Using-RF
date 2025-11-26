@@ -8,6 +8,7 @@ Built by **Md Ali Raza** - Python Backend Developer & ML Engineer
 
 - **Portfolio Homepage** - My professional profile, skills, projects, and experience
 - **House Price Prediction Tool** - Interactive ML model that predicts property prices based on features like bedrooms, bathrooms, location, etc.
+- **Google Maps Location Picker** - Interactive map interface for selecting property location (like Ola/Uber) with "Locate Me" functionality
 - **XGBoost ML Model** - Trained on Indian real estate data with 87.6% R² score
 - **Responsive Design** - Works well on desktop and mobile
 - **Indian Currency Support** - Prices displayed in ₹ (Rupees) with proper formatting
@@ -143,14 +144,18 @@ ENVIRONMENT=development
 SECRET_KEY=your-secret-key-here
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
+GOOGLE_MAPS_API_KEY=your-google-maps-api-key-here
 
 [PRODUCTION]
 ENVIRONMENT=production
 DEBUG=False
 ALLOWED_HOSTS=your-domain.com,www.your-domain.com
+GOOGLE_MAPS_API_KEY=your-google-maps-api-key-here
 ```
 
 **Important**: Never commit `settings.ini` to version control! It contains sensitive information.
+
+**Google Maps API Key**: The location picker requires a Google Maps JavaScript API key. Get your API key from [Google Cloud Console](https://console.cloud.google.com/google/maps-apis). Make sure to enable the "Maps JavaScript API" for your project.
 
 ## Usage
 
@@ -178,8 +183,7 @@ ALLOWED_HOSTS=your-domain.com,www.your-domain.com
    - Lot Area (sq ft)
    - Floor Number
    - Property Type
-   - Latitude
-   - Longitude
+   - **Property Location**: Use the interactive map to drop a pin at your property location, or click "Locate Me" to automatically detect your current location
 
 5. **Click "Predict Price"** to get the estimated house price.
 
@@ -200,6 +204,7 @@ The homepage includes:
 ## AWS Deployment
 
 ### Initial Setup on EC2
+print("Testing PR bot review")
 
 1. **Launch an EC2 instance** (Ubuntu 22.04 LTS recommended)
 
@@ -373,8 +378,11 @@ I chose XGBoost because:
 - **Lot Area**: Integer (minimum 100 sq ft)
 - **Floor Number**: Integer (0-50)
 - **Property Type**: Dropdown selection (e.g., Flat, House, Apartment)
-- **Latitude**: Decimal (-90 to 90)
-- **Longitude**: Decimal (-180 to 180)
+- **Property Location**: Interactive Google Maps picker
+  - Click on the map to drop a pin at your property location
+  - Drag the pin to adjust the location
+  - Use "Locate Me" button to automatically detect your current location
+  - Coordinates are automatically captured (latitude: -90 to 90, longitude: -180 to 180)
 
 ## API Endpoints
 

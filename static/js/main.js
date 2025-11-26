@@ -12,13 +12,37 @@ document.addEventListener('DOMContentLoaded', function() {
         inputs.forEach(input => {
             input.addEventListener('blur', function() {
                 validateInput(this);
+                updateSuccessIndicator(this);
             });
             
             input.addEventListener('input', function() {
                 // Remove error styling on input
                 if (this.classList.contains('error')) {
                     this.classList.remove('error');
+                    this.setAttribute('aria-invalid', 'false');
                 }
+                // Real-time validation for better UX
+                if (this.value.trim() || (this.tagName === 'SELECT' && this.value)) {
+                    validateInput(this);
+                    updateSuccessIndicator(this);
+                } else {
+                    removeErrorMessage(this);
+                    this.setAttribute('aria-invalid', 'false');
+                    updateSuccessIndicator(this);
+                }
+            });
+            
+            // Add change event for select dropdowns
+            if (input.tagName === 'SELECT') {
+                input.addEventListener('change', function() {
+                    validateInput(this);
+                    updateSuccessIndicator(this);
+                });
+            }
+            
+            // Add focus event for better accessibility
+            input.addEventListener('focus', function() {
+                this.setAttribute('aria-invalid', 'false');
             });
         });
         
@@ -33,6 +57,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
+            // Validate location selection
+            const latInput = document.getElementById('latitude');
+            const lonInput = document.getElementById('longitude');
+            const mapContainer = document.getElementById('mapContainer');
+            
+            if (latInput && lonInput) {
+                const lat = latInput.value.trim();
+                const lon = lonInput.value.trim();
+                
+                if (!lat || !lon) {
+                    isValid = false;
+                    // Show error on map container
+                    if (mapContainer) {
+                        mapContainer.classList.add('error');
+                        showMapErrorMessage('Please select a location on the map or use "Locate Me" button');
+                    }
+                } else {
+                    // Validate coordinate ranges
+                    const latNum = parseFloat(lat);
+                    const lonNum = parseFloat(lon);
+                    
+                    if (isNaN(latNum) || latNum < -90 || latNum > 90) {
+                        isValid = false;
+                        if (mapContainer) {
+                            mapContainer.classList.add('error');
+                            showMapErrorMessage('Invalid latitude. Please select a valid location.');
+                        }
+                    } else if (isNaN(lonNum) || lonNum < -180 || lonNum > 180) {
+                        isValid = false;
+                        if (mapContainer) {
+                            mapContainer.classList.add('error');
+                            showMapErrorMessage('Invalid longitude. Please select a valid location.');
+                        }
+                    } else {
+                        // Remove error styling if valid
+                        if (mapContainer) {
+                            mapContainer.classList.remove('error');
+                            removeMapErrorMessage();
+                        }
+                    }
+                }
+            }
+            
             if (isValid) {
                 // Show loading state
                 submitBtn.disabled = true;
@@ -44,10 +111,12 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 e.preventDefault();
                 // Scroll to first error
-                const firstError = form.querySelector('.form-input.error');
+                const firstError = form.querySelector('.form-input.error, .map-container.error');
                 if (firstError) {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    firstError.focus();
+                    if (firstError.focus) {
+                        firstError.focus();
+                    }
                 }
             }
         });
@@ -77,6 +146,7 @@ function validateInput(input) {
     
     // Remove previous error styling
     input.classList.remove('error');
+    input.setAttribute('aria-invalid', 'false');
     removeErrorMessage(input);
     
     // Check if required field is empty
@@ -103,6 +173,14 @@ function validateInput(input) {
         }
     }
     
+    // Validate select dropdowns
+    if (input.tagName === 'SELECT' && input.hasAttribute('required')) {
+        if (!value) {
+            isValid = false;
+            errorMessage = 'Please select an option';
+        }
+    }
+    
     // Validate latitude
     if (input.name === 'latitude' && value) {
         const lat = parseFloat(value);
@@ -124,7 +202,11 @@ function validateInput(input) {
     // Show error if invalid
     if (!isValid) {
         input.classList.add('error');
+        input.setAttribute('aria-invalid', 'true');
         showErrorMessage(input, errorMessage);
+    } else if (value && input.hasAttribute('required')) {
+        // Mark as valid for success indicator
+        input.setAttribute('aria-invalid', 'false');
     }
     
     return isValid;
@@ -153,7 +235,59 @@ function removeErrorMessage(input) {
     }
 }
 
-// Add CSS for error state
+function showMapErrorMessage(message) {
+    removeMapErrorMessage();
+    
+    const mapContainer = document.getElementById('mapContainer');
+    if (!mapContainer) return;
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'map-error-message';
+    errorDiv.textContent = message;
+    errorDiv.style.cssText = `
+        color: var(--error-color);
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: #fee2e2;
+        border: 1px solid var(--error-color);
+        border-radius: 8px;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    // Insert after map container
+    mapContainer.parentNode.insertBefore(errorDiv, mapContainer.nextSibling);
+}
+
+function removeMapErrorMessage() {
+    const existingError = document.querySelector('.map-error-message');
+    if (existingError) {
+        existingError.remove();
+    }
+}
+
+function updateSuccessIndicator(input) {
+    const wrapper = input.closest('.input-wrapper');
+    if (!wrapper) return;
+    
+    const successIcon = wrapper.querySelector('.input-success-icon');
+    if (!successIcon) return;
+    
+    const value = input.value.trim();
+    const isValid = !input.classList.contains('error') && 
+                    input.checkValidity() && 
+                    (value || (input.tagName === 'SELECT' && input.value));
+    
+    if (isValid && input.hasAttribute('required')) {
+        successIcon.style.opacity = '1';
+        successIcon.style.transform = 'scale(1)';
+    } else {
+        successIcon.style.opacity = '0';
+        successIcon.style.transform = 'scale(0.8)';
+    }
+}
+
+// Add CSS for error state and enhanced styles
 const style = document.createElement('style');
 style.textContent = `
     .form-input.error {
@@ -163,6 +297,27 @@ style.textContent = `
     
     .form-input.error:focus {
         box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+    }
+    
+    /* Enhanced success state */
+    .form-input:valid:not(:placeholder-shown):not(:focus):not(.error) {
+        border-color: var(--success-color);
+    }
+    
+    /* Select dropdown success state */
+    select.form-input:valid:not([value=""]):not(:focus):not(.error) {
+        border-color: var(--success-color);
+    }
+    
+    /* Smooth transitions for all states */
+    .form-input {
+        transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    /* Focus ring for accessibility */
+    .form-input:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
     }
 `;
 document.head.appendChild(style);
