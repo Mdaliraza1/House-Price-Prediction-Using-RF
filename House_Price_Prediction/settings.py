@@ -28,7 +28,8 @@ else:
 # Get settings with fallback to defaults
 def get_setting(section, key, default=None, fallback_section='DEFAULT'):
     """Get setting from config file with fallback"""
-    if config.has_option(section, key):
+    # First try the specified section
+    if config.has_section(section) and config.has_option(section, key):
         value = config.get(section, key)
         # Handle boolean values
         if value.lower() in ('true', 'false'):
@@ -37,6 +38,7 @@ def get_setting(section, key, default=None, fallback_section='DEFAULT'):
         if ',' in value:
             return [item.strip() for item in value.split(',')]
         return value
+    # Then try fallback section (usually DEFAULT)
     elif fallback_section and config.has_option(fallback_section, key):
         value = config.get(fallback_section, key)
         if value.lower() in ('true', 'false'):
@@ -95,7 +97,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                 'django.template.context_processors.settings',
             ],
         },
     },
@@ -161,5 +162,9 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Google Maps API Key
+# Try to get from settings.ini (ENV section, then DEFAULT), then environment variable
 GOOGLE_MAPS_API_KEY = get_setting(ENV, 'GOOGLE_MAPS_API_KEY', 
     default=os.environ.get('GOOGLE_MAPS_API_KEY', ''))
+# Ensure it's a string and strip whitespace
+if GOOGLE_MAPS_API_KEY:
+    GOOGLE_MAPS_API_KEY = str(GOOGLE_MAPS_API_KEY).strip()
