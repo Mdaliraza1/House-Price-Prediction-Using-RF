@@ -162,3 +162,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Google Maps API Key
 GOOGLE_MAPS_API_KEY = get_setting(ENV, 'GOOGLE_MAPS_API_KEY', 
     default=os.environ.get('GOOGLE_MAPS_API_KEY', ''))
+# CSRF Trusted Origins
+CSRF_TRUSTED_ORIGINS = [
+    "https://3.110.11.96",
+    "http://3.110.11.96",
+    "https://mdaliraza.work.gd",
+    "http://mdaliraza.work.gd",
+    "https://www.mdaliraza.work.gd",
+    "http://www.mdaliraza.work.gd",
+]
