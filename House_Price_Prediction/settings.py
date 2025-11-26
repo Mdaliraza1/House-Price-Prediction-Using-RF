@@ -168,3 +168,12 @@ GOOGLE_MAPS_API_KEY = get_setting(ENV, 'GOOGLE_MAPS_API_KEY',
 # Ensure it's a string and strip whitespace
 if GOOGLE_MAPS_API_KEY:
     GOOGLE_MAPS_API_KEY = str(GOOGLE_MAPS_API_KEY).strip()
+# CSRF Trusted Origins
+CSRF_TRUSTED_ORIGINS = [
+    "https://3.110.11.96",
+    "http://3.110.11.96",
+    "https://mdaliraza.work.gd",
+    "http://mdaliraza.work.gd",
+    "https://www.mdaliraza.work.gd",
+    "http://www.mdaliraza.work.gd",
+]
