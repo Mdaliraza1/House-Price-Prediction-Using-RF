@@ -943,3 +943,119 @@ select.form-input {
     }
 }
 
+/* Amenities Card Styles */
+.amenities-card {
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-top: 2rem;
+    box-shadow: var(--shadow-xl);
+    animation: fadeInUp 0.6s ease;
+}
+
+.amenities-header {
+    margin-bottom: 1.5rem;
+}
+
+.amenities-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.amenities-loading {
+    text-align: center;
+    padding: 2rem;
+}
+
+.amenities-loading p {
+    margin-top: 1rem;
+    color: var(--text-secondary);
+}
+
+.amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.amenity-item {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.amenity-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+}
+
+.amenity-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.amenity-details {
+    flex: 1;
+}
+
+.amenity-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.amenity-type {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.amenity-distances {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.distance-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.distance-icon {
+    font-size: 1rem;
+}
+
+.distance-text {
+    font-weight: 500;
+}
+
+.no-amenities {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .amenities-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .amenities-card {
+        padding: 1.5rem;
+    }
+}
+
