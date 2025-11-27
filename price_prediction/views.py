@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from .utils import predict_house_price, get_property_types
 import requests
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def predict_price(request):
     """Main view: shows form and processes predictions"""
@@ -133,105 +134,6 @@ def call_google_api(url, params):
 
 
 @require_http_methods(["GET"])
-def fetch_nearby_places(request):
-    """Proxy endpoint to fetch nearby places from Google Places API"""
-    lat = request.GET.get('lat')
-    lng = request.GET.get('lng')
-    place_type = request.GET.get('type')
-    
-    if not lat or not lng or not place_type:
-        return JsonResponse({'error': 'Missing required parameters: lat, lng, type'}, status=400)
-    
-    api_key, error_response = get_api_key()
-    if error_response:
-        return error_response
-    
-    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-    params = {
-        'location': f"{lat},{lng}",
-        'type': place_type,
-        'radius': 1000,
-        'key': api_key
-    }
-    
-    data, error_response = call_google_api(url, params)
-    if error_response:
-        return error_response
-    
-    return JsonResponse(data)
-
-
-@require_http_methods(["GET"])
-def search_places_by_text(request):
-    """Proxy endpoint to search places using Google Places API Text Search"""
-    lat = request.GET.get('lat')
-    lng = request.GET.get('lng')
-    query = request.GET.get('query')
-    
-    if not lat or not lng or not query:
-        return JsonResponse({'error': 'Missing required parameters: lat, lng, query'}, status=400)
-    
-    api_key, error_response = get_api_key()
-    if error_response:
-        return error_response
-    
-    url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-    params = {
-        'query': query,
-        'location': f"{lat},{lng}",
-        'radius': 1000,
-        'key': api_key
-    }
-    
-    data, error_response = call_google_api(url, params)
-    if error_response:
-        return error_response
-    
-    return JsonResponse(data)
-
-
-@require_http_methods(["GET"])
-def calculate_distance(request):
-    """Proxy endpoint to calculate distances using Google Distance Matrix API"""
-    origin_lat = request.GET.get('origin_lat')
-    origin_lng = request.GET.get('origin_lng')
-    dest_lat = request.GET.get('dest_lat')
-    dest_lng = request.GET.get('dest_lng')
-    mode = request.GET.get('mode', 'walking')
-    
-    if not all([origin_lat, origin_lng, dest_lat, dest_lng]):
-        return JsonResponse({'error': 'Missing required parameters'}, status=400)
-    
-    api_key, error_response = get_api_key()
-    if error_response:
-        return error_response
-    
-    url = "https://maps.googleapis.com/maps/api/distancematrix/json"
-    params = {
-        'origins': f"{origin_lat},{origin_lng}",
-        'destinations': f"{dest_lat},{dest_lng}",
-        'mode': mode,
-        'units': 'metric',
-        'key': api_key
-    }
-    
-    data, error_response = call_google_api(url, params)
-    if error_response:
-        return error_response
-    
-    if data.get('status') == 'REQUEST_DENIED':
-        error_msg = data.get('error_message', 'Distance Matrix API request denied')
-        if 'legacy API' in error_msg.lower():
-            return JsonResponse({
-                'status': 'REQUEST_DENIED',
-                'error': 'Distance Matrix API (New) is not enabled. Please enable it in Google Cloud Console.',
-                'error_message': error_msg
-            }, status=403)
-    
-    return JsonResponse(data)
-
-
-@require_http_methods(["GET"])
 def calculate_batch_distances(request):
     """Proxy endpoint to calculate distances for multiple destinations in a single API call"""
     origin_lat = request.GET.get('origin_lat')
@@ -269,3 +171,179 @@ def calculate_batch_distances(request):
             }, status=403)
     
     return JsonResponse(data)
+
+
+@require_http_methods(["GET"])
+def calculate_batch_distances_both_modes(request):
+    """Optimized endpoint to calculate both walking and driving distances in parallel"""
+    origin_lat = request.GET.get('origin_lat')
+    origin_lng = request.GET.get('origin_lng')
+    destinations = request.GET.get('destinations')
+    
+    if not all([origin_lat, origin_lng, destinations]):
+        return JsonResponse({'error': 'Missing required parameters'}, status=400)
+    
+    api_key, error_response = get_api_key()
+    if error_response:
+        return error_response
+    
+    def fetch_distance(mode):
+        """Fetch distance for a specific mode"""
+        url = "https://maps.googleapis.com/maps/api/distancematrix/json"
+        params = {
+            'origins': f"{origin_lat},{origin_lng}",
+            'destinations': destinations,
+            'mode': mode,
+            'units': 'metric',
+            'key': api_key
+        }
+        data, error_response = call_google_api(url, params)
+        if error_response:
+            return {'mode': mode, 'status': 'ERROR', 'data': None}
+        return {'mode': mode, 'status': 'OK', 'data': data}
+    
+    # Fetch both modes in parallel using ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        walk_future = executor.submit(fetch_distance, 'walking')
+        drive_future = executor.submit(fetch_distance, 'driving')
+        
+        walk_result = walk_future.result()
+        drive_result = drive_future.result()
+    
+    # Check for REQUEST_DENIED errors
+    if walk_result.get('data') and walk_result['data'].get('status') == 'REQUEST_DENIED':
+        error_msg = walk_result['data'].get('error_message', 'Distance Matrix API request denied')
+        if 'legacy API' in error_msg.lower():
+            return JsonResponse({
+                'status': 'REQUEST_DENIED',
+                'error': 'Distance Matrix API (New) is not enabled. Please enable it in Google Cloud Console.',
+                'error_message': error_msg
+            }, status=403)
+    
+    if drive_result.get('data') and drive_result['data'].get('status') == 'REQUEST_DENIED':
+        error_msg = drive_result['data'].get('error_message', 'Distance Matrix API request denied')
+        if 'legacy API' in error_msg.lower():
+            return JsonResponse({
+                'status': 'REQUEST_DENIED',
+                'error': 'Distance Matrix API (New) is not enabled. Please enable it in Google Cloud Console.',
+                'error_message': error_msg
+            }, status=403)
+    
+    return JsonResponse({
+        'status': 'OK',
+        'walking': walk_result.get('data', {}),
+        'driving': drive_result.get('data', {})
+    })
+
+
+@require_http_methods(["GET"])
+def fetch_all_amenities(request):
+    """Optimized endpoint to fetch all amenities in parallel using multithreading"""
+    lat = request.GET.get('lat')
+    lng = request.GET.get('lng')
+    
+    if not lat or not lng:
+        return JsonResponse({'error': 'Missing required parameters: lat, lng'}, status=400)
+    
+    api_key, error_response = get_api_key()
+    if error_response:
+        return error_response
+    
+    # Define amenity types to search
+    amenity_types = [
+        'train_station',
+        'subway_station',
+        'hospital',
+        'school',
+        'bank',
+        'university'
+    ]
+    
+    # Text search queries for specific types
+    text_search_queries = {
+        'train_station': 'railway station',
+        'subway_station': 'metro station',
+        'hospital': 'hospital'
+    }
+    
+    def fetch_nearby_place(place_type):
+        """Fetch nearby places for a specific type"""
+        url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+        params = {
+            'location': f"{lat},{lng}",
+            'type': place_type,
+            'radius': 1000,
+            'key': api_key
+        }
+        data, error_response = call_google_api(url, params)
+        if error_response:
+            return {'type': place_type, 'status': 'ERROR', 'results': []}
+        return {'type': place_type, 'data': data}
+    
+    def fetch_text_search(query, place_type):
+        """Fetch places using text search"""
+        url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
+        params = {
+            'query': query,
+            'location': f"{lat},{lng}",
+            'radius': 1000,
+            'key': api_key
+        }
+        data, error_response = call_google_api(url, params)
+        if error_response:
+            return {'type': place_type, 'status': 'ERROR', 'results': []}
+        return {'type': place_type, 'data': data}
+    
+    # Use ThreadPoolExecutor to fetch all amenities in parallel
+    results = {}
+    
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        # Submit all tasks
+        future_to_type = {}
+        
+        # For types that need text search, submit both text search and nearby search
+        for amenity_type in amenity_types:
+            if amenity_type in text_search_queries:
+                # Submit text search
+                future = executor.submit(fetch_text_search, text_search_queries[amenity_type], amenity_type)
+                future_to_type[future] = (amenity_type, 'text')
+                # Also submit nearby search as fallback
+                future2 = executor.submit(fetch_nearby_place, amenity_type)
+                future_to_type[future2] = (amenity_type, 'nearby')
+            else:
+                # Submit nearby search only
+                future = executor.submit(fetch_nearby_place, amenity_type)
+                future_to_type[future] = (amenity_type, 'nearby')
+        
+        # Collect results as they complete
+        for future in as_completed(future_to_type):
+            amenity_type, search_type = future_to_type[future]
+            try:
+                result = future.result()
+                if amenity_type not in results:
+                    results[amenity_type] = {}
+                results[amenity_type][search_type] = result
+            except Exception as e:
+                # Handle any exceptions
+                if amenity_type not in results:
+                    results[amenity_type] = {}
+                results[amenity_type][search_type] = {'type': amenity_type, 'status': 'ERROR', 'data': {'status': 'ERROR', 'results': []}}
+    
+    # Format response
+    formatted_results = {}
+    for amenity_type in amenity_types:
+        if amenity_type in results:
+            # Prefer text search results if available, otherwise use nearby search
+            if 'text' in results[amenity_type] and results[amenity_type]['text'].get('data', {}).get('status') == 'OK':
+                formatted_results[amenity_type] = results[amenity_type]['text']['data']
+            elif 'nearby' in results[amenity_type] and results[amenity_type]['nearby'].get('data', {}).get('status') == 'OK':
+                formatted_results[amenity_type] = results[amenity_type]['nearby']['data']
+            else:
+                formatted_results[amenity_type] = {'status': 'ZERO_RESULTS', 'results': []}
+        else:
+            formatted_results[amenity_type] = {'status': 'ZERO_RESULTS', 'results': []}
+    
+    return JsonResponse({
+        'status': 'OK',
+        'results': formatted_results
+    })

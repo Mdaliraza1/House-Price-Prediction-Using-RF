@@ -38,7 +38,11 @@ window.initMapPicker = function() {
             if (mapLoading) mapLoading.style.display = 'none';
         });
         
-        window.map.addListener('click', (event) => placeMarker(event.latLng));
+        window.map.addListener('click', (event) => {
+            placeMarker(event.latLng);
+            const statusDiv = document.getElementById('locationStatus');
+            getAddressFromCoords(event.latLng, statusDiv);
+        });
         setupButtons();
         setupLocationSearch();
         
@@ -87,6 +91,9 @@ function setupLocationSearch() {
                     window.map.setZoom(15);
                     placeMarker(location);
                     searchInput.value = place.formatted_address || place.name;
+                    // Hide status when address is filled from autocomplete
+                    const statusDiv = document.getElementById('locationStatus');
+                    updateStatus(statusDiv, '', '', true);
                 }
             });
         } catch (error) {
@@ -102,10 +109,16 @@ function clearMapErrors() {
     if (typeof removeMapErrorMessage === 'function') removeMapErrorMessage();
 }
 
-function updateStatus(statusDiv, text, className) {
+function updateStatus(statusDiv, text, className, hideIfEmpty = false) {
     if (statusDiv) {
-        statusDiv.textContent = text;
-        statusDiv.className = className;
+        if (hideIfEmpty && !text) {
+            statusDiv.style.display = 'none';
+            statusDiv.textContent = '';
+        } else {
+            statusDiv.style.display = 'block';
+            statusDiv.textContent = text;
+            statusDiv.className = className;
+        }
     }
 }
 
@@ -132,8 +145,6 @@ function placeMarker(location) {
     latInput.value = lat.toFixed(6);
     lonInput.value = lng.toFixed(6);
     
-    updateStatus(statusDiv, `Location set: ${lat.toFixed(6)}, ${lng.toFixed(6)}`, 'location-status location-status-success');
-    
     if (clearBtn) clearBtn.style.display = 'inline-flex';
     
     const mapInstruction = document.getElementById('mapInstruction');
@@ -148,8 +159,9 @@ function placeMarker(location) {
         const newLng = newLocation.lng();
         latInput.value = newLat.toFixed(6);
         lonInput.value = newLng.toFixed(6);
-        updateStatus(statusDiv, `Location updated: ${newLat.toFixed(6)}, ${newLng.toFixed(6)}`, 'location-status location-status-success');
+        // Don't show status here - it will be hidden when address is filled, or shown if geocoding fails
         clearMapErrors();
+        getAddressFromCoords(newLocation, statusDiv);
     });
 }
 
@@ -168,7 +180,7 @@ function clearLocation() {
     
     if (latInput) latInput.value = '';
     if (lonInput) lonInput.value = '';
-    updateStatus(statusDiv, '', 'location-status');
+    updateStatus(statusDiv, '', 'location-status', true);
     
     if (clearBtn) clearBtn.style.display = 'none';
     if (mapInstruction) mapInstruction.textContent = 'Click on the map or drag the pin to set your property location';
@@ -231,7 +243,8 @@ function getAddressFromCoords(location, statusDiv) {
             if (status === 'OK' && results && results.length > 0 && results[0]) {
                 const address = results[0].formatted_address;
                 if (searchInput) searchInput.value = address;
-                updateStatus(statusDiv, `Location: ${address}`, 'location-status location-status-success');
+                // Hide status when address is successfully filled in text box
+                updateStatus(statusDiv, '', '', true);
             } else {
                 showGeocodingError(status, location, searchInput, statusDiv);
             }

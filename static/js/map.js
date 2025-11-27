@@ -145,9 +145,6 @@ function placeMarker(location) {
     latInput.value = lat.toFixed(6);
     lonInput.value = lng.toFixed(6);
     
-    // Don't show status here - it will be hidden when address is filled, or shown if geocoding fails
-    // updateStatus(statusDiv, `Location set: ${lat.toFixed(6)}, ${lng.toFixed(6)}`, 'location-status location-status-success');
-    
     if (clearBtn) clearBtn.style.display = 'inline-flex';
     
     const mapInstruction = document.getElementById('mapInstruction');
