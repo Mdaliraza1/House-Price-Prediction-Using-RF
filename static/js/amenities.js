@@ -387,7 +387,7 @@ function showAmenities(amenities) {
     amenities.forEach(amenity => {
         const card = document.createElement('div');
         card.className = 'amenity-item';
-        
+        ////
         // Build distance items only for available distances
         const distanceItems = [];
         if (amenity.walkingDistance !== 'N/A' && amenity.walkingDistance !== 'Calculating...') {
