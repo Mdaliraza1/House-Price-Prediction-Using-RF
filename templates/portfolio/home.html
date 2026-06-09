@@ -5,8 +5,6 @@
 
 {% block extra_css %}
 <style>
-    /* Haven Church Inspired Design - Dark Theme with Orange Accents */
-
     :root {
         --dark-bg: #0a0a0a;
         --dark-surface: #141414;
@@ -20,7 +18,6 @@
         --border-dark: #2a2a2a;
     }
 
-    /* Override base styles for dark theme */
     body {
         background: #0a0a0a !important;
         background-image:
@@ -43,7 +40,6 @@
         z-index: 1 !important;
     }
 
-    /* Navbar Styles - Fine-tuned Spacing and Alignment */
     .header {
         background: rgba(10, 10, 10, 0.98) !important;
         backdrop-filter: blur(10px) !important;
@@ -119,14 +115,8 @@
         transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
-    .nav-link:hover {
-        color: var(--orange-primary) !important;
-        background: transparent !important;
-    }
-
-    .nav-link:hover::after {
-        width: 100% !important;
-    }
+    .nav-link:hover { color: var(--orange-primary) !important; background: transparent !important; }
+    .nav-link:hover::after { width: 100% !important; }
 
     .nav-link.active {
         color: var(--text-white) !important;
@@ -136,11 +126,8 @@
         border-radius: 2px !important;
     }
 
-    .nav-link.active::after {
-        display: none !important;
-    }
+    .nav-link.active::after { display: none !important; }
 
-    /* Footer Styles - Remove fixed positioning */
     .footer {
         background: var(--dark-surface) !important;
         border-top: 1px solid var(--border-dark) !important;
@@ -158,19 +145,8 @@
         gap: 1.5rem !important;
     }
 
-    .footer-text {
-        margin: 0 !important;
-        font-size: 0.875rem !important;
-        font-weight: 300 !important;
-    }
-
-    .footer-text::before {
-        content: "💻 " !important;
-    }
-
-    .footer-text {
-        color: var(--text-muted) !important;
-    }
+    .footer-text { margin: 0 !important; font-size: 0.875rem !important; font-weight: 300 !important; color: var(--text-muted) !important; }
+    .footer-text::before { content: "💻 " !important; }
 
     .footer-social-link {
         display: inline-flex !important;
@@ -186,11 +162,7 @@
         text-decoration: none !important;
     }
 
-    .footer-social-link svg {
-        width: 20px !important;
-        height: 20px !important;
-        fill: currentColor !important;
-    }
+    .footer-social-link svg { width: 20px !important; height: 20px !important; fill: currentColor !important; }
 
     .footer-social-link:hover {
         border-color: var(--orange-primary) !important;
@@ -199,7 +171,6 @@
         transform: translateY(-2px) !important;
     }
 
-    /* Hero Section - Dark with Orange Glow */
     .portfolio-hero {
         background: transparent;
         color: var(--text-white);
@@ -215,21 +186,13 @@
     .portfolio-hero::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        top: 0; left: 0; right: 0; bottom: 0;
         background: radial-gradient(ellipse 120% 90% at 25% 40%, rgba(255, 107, 53, 0.3) 0%, rgba(255, 107, 53, 0.2) 30%, rgba(255, 107, 53, 0.1) 50%, transparent 80%);
         pointer-events: none;
         z-index: 0;
     }
 
-    .profile-section {
-        position: relative;
-        z-index: 1;
-        max-width: 900px;
-        margin: 0 auto;
-    }
+    .profile-section { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
 
     .profile-name {
         font-size: 5.5rem;
@@ -301,17 +264,13 @@
     .contact-link::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
         background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.15), transparent);
         transition: left 0.5s ease;
     }
 
-    .contact-link:hover::before {
-        left: 100%;
-    }
+    .contact-link:hover::before { left: 100%; }
 
     .contact-link:hover {
         border-color: rgba(255, 107, 53, 0.4);
@@ -320,32 +279,13 @@
         transform: translateY(-2px);
     }
 
-    .contact-link span:first-child {
-        font-size: 1rem;
-        opacity: 0.9;
-        transition: all 0.3s ease;
-    }
+    .contact-link span:first-child { font-size: 1rem; opacity: 0.9; transition: all 0.3s ease; }
+    .contact-link:hover span:first-child { opacity: 1; transform: scale(1.1); }
 
-    .contact-link:hover span:first-child {
-        opacity: 1;
-        transform: scale(1.1);
-    }
+    .contact-link span:last-child { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    /* Email link - handle long text */
-    .contact-link span:last-child {
-        max-width: 200px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+    @media (min-width: 768px) { .contact-link span:last-child { max-width: none; } }
 
-    @media (min-width: 768px) {
-        .contact-link span:last-child {
-            max-width: none;
-        }
-    }
-
-    /* Content Sections - Direct on Background */
     .content-section {
         background: transparent;
         padding: 6rem 3rem;
@@ -357,19 +297,14 @@
         transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .content-section.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    .content-section.visible { opacity: 1; transform: translateY(0); }
 
     .content-section::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 50%;
+        top: 0; left: 50%;
         transform: translateX(-50%);
-        width: 100px;
-        height: 1px;
+        width: 100px; height: 1px;
         background: linear-gradient(90deg, transparent, var(--orange-primary), transparent);
         opacity: 0.3;
     }
@@ -391,10 +326,8 @@
     .section-title::after {
         content: '';
         position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 60px;
-        height: 2px;
+        bottom: 0; left: 0;
+        width: 60px; height: 2px;
         background: var(--orange-primary);
         opacity: 0.8;
     }
@@ -421,7 +354,6 @@
         text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     }
 
-    /* Skills Grid - Improved Spacing */
     .skills-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -439,10 +371,7 @@
         transform: translateY(20px);
     }
 
-    .skill-category.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    .skill-category.visible { opacity: 1; transform: translateY(0); }
 
     .skill-category:hover {
         border-color: var(--orange-primary);
@@ -459,12 +388,7 @@
         letter-spacing: 0.1em;
     }
 
-    .skill-items {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.875rem;
-        margin-top: 0.5rem;
-    }
+    .skill-items { display: flex; flex-wrap: wrap; gap: 0.875rem; margin-top: 0.5rem; }
 
     .skill-tag {
         background: rgba(255, 255, 255, 0.02);
@@ -484,7 +408,6 @@
         transform: translateY(-2px);
     }
 
-    /* Projects Grid - Dark Cards with Orange Accents */
     .projects-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -506,17 +429,12 @@
         transform: translateY(30px);
     }
 
-    .project-card.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    .project-card.visible { opacity: 1; transform: translateY(0); }
 
     .project-card::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
+        top: 0; left: 0; right: 0;
         height: 2px;
         background: linear-gradient(90deg, var(--orange-primary), var(--orange-glow));
         transform: scaleX(0);
@@ -527,22 +445,14 @@
     .project-card::after {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        top: 0; left: 0; right: 0; bottom: 0;
         background: radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.05) 0%, transparent 70%);
         opacity: 0;
         transition: opacity 0.5s ease;
     }
 
-    .project-card:hover::before {
-        transform: scaleX(1);
-    }
-
-    .project-card:hover::after {
-        opacity: 1;
-    }
+    .project-card:hover::before { transform: scaleX(1); }
+    .project-card:hover::after { opacity: 1; }
 
     .project-card:hover {
         border-color: var(--orange-primary);
@@ -561,21 +471,14 @@
     }
 
     .project-logo-img {
-        width: 80px;
-        height: 80px;
+        width: 80px; height: 80px;
         object-fit: contain;
         transition: all 0.3s ease;
         filter: brightness(0.95);
     }
 
-    .project-card:hover .project-icon {
-        opacity: 1;
-    }
-
-    .project-card:hover .project-logo-img {
-        transform: scale(1.1);
-        filter: brightness(1.1);
-    }
+    .project-card:hover .project-icon { opacity: 1; }
+    .project-card:hover .project-logo-img { transform: scale(1.1); filter: brightness(1.1); }
 
     .project-name {
         font-size: 1.75rem;
@@ -595,12 +498,7 @@
         font-weight: 300;
     }
 
-    .project-tech {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        margin-bottom: 2rem;
-    }
+    .project-tech { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2rem; }
 
     .tech-badge {
         background: transparent;
@@ -635,7 +533,6 @@
         background: rgba(255, 107, 53, 0.05);
     }
 
-    /* Experience Items - Minimal Dark Style */
     .experience-item {
         background: transparent;
         padding: 3rem;
@@ -647,10 +544,7 @@
         transform: translateX(-20px);
     }
 
-    .experience-item.visible {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    .experience-item.visible { opacity: 1; transform: translateX(0); }
 
     .experience-item:hover {
         background: rgba(255, 107, 53, 0.05);
@@ -679,26 +573,39 @@
     .experience-company {
         color: var(--orange-primary);
         font-weight: 300;
-        font-size: 1rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         font-size: 0.875rem;
     }
 
-    .experience-duration {
+    .experience-duration { color: var(--text-muted); font-size: 0.875rem; font-weight: 300; white-space: nowrap; }
+
+    .experience-description { color: var(--text-muted); line-height: 1.7; font-weight: 300; }
+
+    .experience-bullets {
         color: var(--text-muted);
-        font-size: 0.875rem;
+        line-height: 1.8;
         font-weight: 300;
-        white-space: nowrap;
+        padding-left: 0;
+        list-style: none;
+        margin: 0;
     }
 
-    .experience-description {
-        color: var(--text-muted);
-        line-height: 1.7;
-        font-weight: 300;
+    .experience-bullets li {
+        position: relative;
+        padding-left: 1.25rem;
+        margin-bottom: 0.6rem;
+        font-size: 0.9375rem;
     }
 
-    /* Certifications */
+    .experience-bullets li::before {
+        content: '—';
+        position: absolute;
+        left: 0;
+        color: var(--orange-primary);
+        opacity: 0.6;
+    }
+
     .cert-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -716,10 +623,7 @@
         transform: scale(0.95);
     }
 
-    .cert-item.visible {
-        opacity: 1;
-        transform: scale(1);
-    }
+    .cert-item.visible { opacity: 1; transform: scale(1); }
 
     .cert-item:hover {
         border-color: var(--orange-primary);
@@ -735,159 +639,61 @@
         margin-bottom: 0.75rem;
     }
 
-    .cert-org {
-        color: var(--text-muted);
-        font-size: 0.875rem;
-        font-weight: 300;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
+    .cert-org { color: var(--text-muted); font-size: 0.875rem; font-weight: 300; text-transform: uppercase; letter-spacing: 0.05em; }
 
-    /* Enhanced Animations */
     @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(40px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-30px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        from { opacity: 0; transform: translateX(-30px); }
+        to { opacity: 1; transform: translateX(0); }
     }
 
-    @keyframes pulse {
+    html { scroll-behavior: smooth; }
 
-        0%,
-        100% {
-            opacity: 1;
-        }
-
-        50% {
-            opacity: 0.7;
-        }
-    }
-
-    /* Smooth scroll behavior */
-    html {
-        scroll-behavior: smooth;
-    }
-
-    /* Intersection Observer for scroll animations */
     .fade-in-on-scroll {
         opacity: 0;
         transform: translateY(30px);
         transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
-    .fade-in-on-scroll.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    .fade-in-on-scroll.visible { opacity: 1; transform: translateY(0); }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
-        .profile-name {
-            font-size: 3.5rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .profile-title {
-            font-size: 0.75rem;
-            margin-bottom: 4rem;
-            letter-spacing: 0.1em;
-        }
-
-        .content-section {
-            padding: 4rem 2rem;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .contact-links {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0.875rem;
-            margin-top: 0;
-        }
-
-        .contact-link {
-            justify-content: center;
-            padding: 0.875rem 1.5rem;
-            width: 100%;
-        }
-
-        .contact-link span:last-child {
-            max-width: 100%;
-        }
-
-        .projects-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-
-        .skills-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-
-        .experience-item {
-            padding: 2rem;
-        }
+        .profile-name { font-size: 3.5rem; margin-bottom: 1.25rem; }
+        .profile-title { font-size: 0.75rem; margin-bottom: 4rem; letter-spacing: 0.1em; }
+        .content-section { padding: 4rem 2rem; }
+        .section-title { font-size: 2rem; margin-bottom: 3rem; }
+        .contact-links { flex-direction: column; align-items: stretch; gap: 0.875rem; margin-top: 0; }
+        .contact-link { justify-content: center; padding: 0.875rem 1.5rem; width: 100%; }
+        .contact-link span:last-child { max-width: 100%; }
+        .projects-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        .skills-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        .experience-item { padding: 2rem; }
     }
 </style>
 
 <script>
-    // Scroll-triggered animations using Intersection Observer
     document.addEventListener('DOMContentLoaded', function () {
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
 
         const observer = new IntersectionObserver(function (entries) {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) { entry.target.classList.add('visible'); }
             });
         }, observerOptions);
 
-        // Observe all elements that should animate on scroll
-        const elementsToAnimate = document.querySelectorAll(
+        document.querySelectorAll(
             '.content-section, .skill-category, .project-card, .experience-item, .cert-item'
-        );
+        ).forEach(el => observer.observe(el));
 
-        elementsToAnimate.forEach(el => {
-            observer.observe(el);
-        });
-
-        // Add smooth scroll behavior
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+                if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
             });
         });
     });
@@ -900,28 +706,19 @@
         <div class="profile-section">
             <h1 class="profile-name">{{ name }}</h1>
             <p class="profile-title">{{ title }}</p>
-
             <p class="hero-summary">{{ summary }}</p>
-
             <div class="contact-links">
-                <a href="mailto:{{ email }}?subject=Hello%20from%20your%20Portfolio" class="contact-link"
-                    title="Send me an email">
-                    <span>✉️</span>
-                    <span>{{ email }}</span>
+                <a href="mailto:{{ email }}?subject=Hello%20from%20your%20Portfolio" class="contact-link" title="Send me an email">
+                    <span>✉️</span><span>{{ email }}</span>
                 </a>
                 <a href="tel:{{ phone }}" class="contact-link" title="Call me">
-                    <span>📱</span>
-                    <span>{{ phone }}</span>
+                    <span>📱</span><span>{{ phone }}</span>
                 </a>
-                <a href="https://github.com/{{ github }}" target="_blank" rel="noopener noreferrer" class="contact-link"
-                    title="Visit my GitHub">
-                    <span>🔗</span>
-                    <span>GitHub</span>
+                <a href="https://github.com/{{ github }}" target="_blank" rel="noopener noreferrer" class="contact-link" title="Visit my GitHub">
+                    <span>🔗</span><span>GitHub</span>
                 </a>
-                <a href="https://www.linkedin.com/in/{{ linkedin }}" target="_blank" rel="noopener noreferrer"
-                    class="contact-link" title="Connect on LinkedIn">
-                    <span>💼</span>
-                    <span>LinkedIn</span>
+                <a href="https://www.linkedin.com/in/{{ linkedin }}" target="_blank" rel="noopener noreferrer" class="contact-link" title="Connect on LinkedIn">
+                    <span>💼</span><span>LinkedIn</span>
                 </a>
             </div>
         </div>
@@ -929,54 +726,86 @@
 </div>
 
 <div class="container">
+
     <!-- Skills Section -->
     <div class="content-section" style="padding-top: 2rem;">
         <div class="skills-section" style="margin-top: 0;">
             <span class="section-label">Technical Skills</span>
             <div class="skills-grid">
+
                 <div class="skill-category">
                     <h4 class="skill-category-title">Languages</h4>
                     <div class="skill-items">
                         <span class="skill-tag">Python</span>
                         <span class="skill-tag">Java</span>
+                        <span class="skill-tag">SQL</span>
                     </div>
                 </div>
+
                 <div class="skill-category">
-                    <h4 class="skill-category-title">Frameworks</h4>
+                    <h4 class="skill-category-title">Data Analysis</h4>
+                    <div class="skill-items">
+                        <span class="skill-tag">Pandas</span>
+                        <span class="skill-tag">NumPy</span>
+                        <span class="skill-tag">Tableau</span>
+                        <span class="skill-tag">Joins & CTEs</span>
+                        <span class="skill-tag">Window Functions</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4 class="skill-category-title">Backend Frameworks</h4>
                     <div class="skill-items">
                         <span class="skill-tag">Django</span>
                         <span class="skill-tag">Django REST Framework</span>
-                        <span class="skill-tag">Scikit-learn</span>
-                        <span class="skill-tag">Flask</span>
+                        <span class="skill-tag">Django Channels</span>
+                        <span class="skill-tag">WebSockets</span>
                     </div>
                 </div>
+
                 <div class="skill-category">
                     <h4 class="skill-category-title">Databases</h4>
                     <div class="skill-items">
                         <span class="skill-tag">PostgreSQL</span>
                         <span class="skill-tag">MySQL</span>
                         <span class="skill-tag">SQLite</span>
+                        <span class="skill-tag">Data Warehousing</span>
                     </div>
                 </div>
-                <div class="skill-category">
-                    <h4 class="skill-category-title">Cloud & DevOps</h4>
-                    <div class="skill-items">
-                        <span class="skill-tag">AWS (EC2, S3, RDS)</span>
-                        <span class="skill-tag">Docker</span>
-                        <span class="skill-tag">Git</span>
-                    </div>
-                </div>
+
                 <div class="skill-category">
                     <h4 class="skill-category-title">Machine Learning</h4>
                     <div class="skill-items">
-                        <span class="skill-tag">Exploratory Data Analysis</span>
-                        <span class="skill-tag">Supervised Learning</span>
-                        <span class="skill-tag">Unsupervised Learning</span>
+                        <span class="skill-tag">Scikit-learn</span>
                         <span class="skill-tag">Feature Engineering</span>
-                        <span class="skill-tag">Model Training</span>
-                        <span class="skill-tag">Model Evaluation</span>
+                        <span class="skill-tag">Predictive Modeling</span>
+                        <span class="skill-tag">EDA</span>
+                        <span class="skill-tag">Supervised Learning</span>
                     </div>
                 </div>
+
+                <div class="skill-category">
+                    <h4 class="skill-category-title">Cloud & DevOps</h4>
+                    <div class="skill-items">
+                        <span class="skill-tag">AWS EC2</span>
+                        <span class="skill-tag">AWS RDS</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">CI/CD</span>
+                        <span class="skill-tag">Git</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4 class="skill-category-title">APIs & Tools</h4>
+                    <div class="skill-items">
+                        <span class="skill-tag">REST APIs</span>
+                        <span class="skill-tag">Third-Party API Integration</span>
+                        <span class="skill-tag">Postman</span>
+                        <span class="skill-tag">Jupyter Notebooks</span>
+                        <span class="skill-tag">Linux</span>
+                    </div>
+                </div>
+
                 <div class="skill-category">
                     <h4 class="skill-category-title">Authentication</h4>
                     <div class="skill-items">
@@ -985,6 +814,7 @@
                         <span class="skill-tag">Session-based Auth</span>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -997,13 +827,17 @@
                 <div class="experience-header">
                     <div>
                         <div class="experience-role">Software Engineer</div>
-                        <div class="experience-company">Mayabious Art LLP, Kolkata</div>
+                        <div class="experience-company">MA VIE (Subsidiary of Mayabious Art LLP), Kolkata</div>
                     </div>
-                    <div class="experience-duration">Oct 2025 – Present</div>
+                    <div class="experience-duration">Sep 2025 – Present</div>
                 </div>
-                <p class="experience-description">
-                    Developed ML-powered Models, designed REST APIs for backend development.
-                </p>
+                <ul class="experience-bullets">
+                    <li>Designed and deployed backend platforms for IoT device management, AI voice assistants, and sustainability scoring engines, processing structured data from multiple sources.</li>
+                    <li>Built and optimised REST APIs using Django and Django REST Framework, enabling data extraction and integration for analytics workflows.</li>
+                    <li>Deployed containerised applications on AWS EC2 with PostgreSQL (RDS) using Docker and CI/CD pipelines, supporting data storage for operational reporting.</li>
+                    <li>Implemented real-time data streaming using Django Channels and WebSockets for live telemetry dashboards.</li>
+                    <li>Integrated Google Maps API and Distance Matrix API for geospatial data analysis in the sustainability scoring engine.</li>
+                </ul>
             </div>
 
             <div class="experience-item">
@@ -1012,12 +846,13 @@
                         <div class="experience-role">Python Backend Intern</div>
                         <div class="experience-company">Whatbytes, Bangalore</div>
                     </div>
-                    <div class="experience-duration">May 2025 – Oct 2025</div>
+                    <div class="experience-duration">Feb 2025 – Aug 2025</div>
                 </div>
-                <p class="experience-description">
-                    Built DRF-based APIs for puzzle and analytics platform. Implemented OTP + JWT Authentication,
-                    ML-based puzzle difficulty logic, and collaborated on Flutter backend integration.
-                </p>
+                <ul class="experience-bullets">
+                    <li>Built REST APIs using Django REST Framework for analytics and puzzle-based learning platforms, enabling data-driven insights for business teams.</li>
+                    <li>Implemented secure authentication (JWT, OTP) and optimised database queries to improve API response performance.</li>
+                    <li>Collaborated with mobile teams to integrate backend analytics APIs with Flutter-based applications.</li>
+                </ul>
             </div>
 
             <div class="experience-item">
@@ -1028,10 +863,10 @@
                     </div>
                     <div class="experience-duration">Jan 2025 – Jun 2025</div>
                 </div>
-                <p class="experience-description">
-                    Hands-on training with Django, DRF, PostgreSQL, API development, deployments, and real-world backend
-                    workflows.
-                </p>
+                <ul class="experience-bullets">
+                    <li>Completed intensive training in Django, Django REST Framework, and PostgreSQL with focus on production-ready API and database development.</li>
+                    <li>Developed and validated backend APIs, gaining exposure to deployment workflows and data governance practices.</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -1042,59 +877,103 @@
         <h2 class="section-title">Featured Work</h2>
 
         <div class="projects-grid">
-            <!-- House Price Prediction Project -->
+
+            <!-- House Price Prediction -->
             <a href="{% url 'price_prediction:predict' %}" class="project-card">
                 <div class="project-icon">🏠</div>
                 <h3 class="project-name">House Price Prediction</h3>
                 <p class="project-description">
-                    ML-powered house price prediction system using XGBoost with comprehensive EDA, feature engineering,
-                    and production-ready Django integration.
+                    ML-powered house price prediction system using Random Forest with comprehensive EDA, feature engineering, and production-ready Django integration.
                 </p>
                 <div class="project-tech">
                     <span class="tech-badge">Django</span>
-                    <span class="tech-badge">XGBoost</span>
+                    <span class="tech-badge">Random Forest</span>
+                    <span class="tech-badge">Scikit-learn</span>
                     <span class="tech-badge">Feature Engineering</span>
                     <span class="tech-badge">AWS</span>
                 </div>
-                <div class="cta-button">
-                    Try It Now →
-                </div>
+                <div class="cta-button">Try It Now →</div>
             </a>
 
-            <!-- DailyIQ Project -->
-            <a href="https://play.google.com/store/apps/details?id=com.dailyiq" target="_blank"
-                rel="noopener noreferrer" class="project-card">
+            <!-- DailyIQ -->
+            <a href="https://play.google.com/store/apps/details?id=com.dailyiq" target="_blank" rel="noopener noreferrer" class="project-card">
                 <div class="project-icon">
                     <img src="{% static 'images/Screenshot_2025-11-22_151813-removebg-preview-removebg-preview.png' %}"
                         alt="DailyIQ Logo" class="project-logo-img"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
                     <span style="display: none;">📊</span>
                 </div>
-                <h3 class="project-name">DailyIQ - Daily Brain Booster App</h3>
+                <h3 class="project-name">DailyIQ — Personal Analytics Platform</h3>
                 <p class="project-description">
-                    Backend APIs and ML-based scoring algorithms for daily brain boost app with recommendations as per
-                    user's performance and metrics. Social Media Integration for sharing Posts.
+                    Backend APIs powering a live ML-based behavioural analytics mobile app published on Google Play Store. Implemented Scikit-learn predictive models for actionable user insights and secure JWT authentication with optimised PostgreSQL queries.
                 </p>
                 <div class="project-tech">
                     <span class="tech-badge">Django REST Framework</span>
-                    <span class="tech-badge">Machine Learning</span>
-                    <span class="tech-badge">Recommendation System</span>
-                    <span class="tech-badge">Social Media Integration</span>
+                    <span class="tech-badge">Scikit-learn</span>
+                    <span class="tech-badge">JWT Auth</span>
+                    <span class="tech-badge">PostgreSQL</span>
                 </div>
-                <div class="cta-button">
-                    View on Play Store →
-                </div>
+                <div class="cta-button">View on Play Store →</div>
             </a>
 
-            <!-- Fixly Project -->
+            <!-- Greentrix -->
+            <a href="https://github.com/Mdaliraza1/IGBC" target="_blank" rel="noopener noreferrer" class="project-card">
+                <div class="project-icon">🌿</div>
+                <h3 class="project-name">Greentrix — IGBC Green Homes Certification Engine</h3>
+                <p class="project-description">
+                    Rule-based backend engine using Django REST Framework to evaluate and score green building certifications. Used Pandas for data validation and scoring logic, integrated Google Places API and Distance Matrix API for geospatial and sustainability data analysis.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Django REST Framework</span>
+                    <span class="tech-badge">Pandas</span>
+                    <span class="tech-badge">Google Places API</span>
+                    <span class="tech-badge">PostgreSQL</span>
+                </div>
+                <div class="cta-button">View on GitHub →</div>
+            </a>
+
+            <!-- Nexus -->
+            <a href="https://nexus.matratech.in" target="_blank" rel="noopener noreferrer" class="project-card">
+                <div class="project-icon">🔌</div>
+                <h3 class="project-name">Nexus — IoT Device & Project Management Platform</h3>
+                <p class="project-description">
+                    IoT data backend using Django, WebSockets, and Django Channels for real-time temperature streaming and telemetry tracking. Designed relational PostgreSQL schema for device data management. Deployed on AWS EC2 with Docker and CI/CD.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Django</span>
+                    <span class="tech-badge">WebSockets</span>
+                    <span class="tech-badge">Django Channels</span>
+                    <span class="tech-badge">PostgreSQL</span>
+                    <span class="tech-badge">Docker</span>
+                    <span class="tech-badge">AWS EC2</span>
+                </div>
+                <div class="cta-button">Visit Live Site →</div>
+            </a>
+
+            <!-- Maya AI Waiter -->
+            <a href="https://github.com/Mdaliraza1/mothershut" target="_blank" rel="noopener noreferrer" class="project-card">
+                <div class="project-icon">🎙️</div>
+                <h3 class="project-name">Maya AI Waiter — Real-Time Voice Ordering AI</h3>
+                <p class="project-description">
+                    Real-time speech-to-speech AI assistant using OpenAI Realtime WebSocket API with tool-calling architecture for order management. Built a streaming audio data pipeline with real-time processing and response generation.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">OpenAI Realtime API</span>
+                    <span class="tech-badge">WebSockets</span>
+                    <span class="tech-badge">Tool Calling</span>
+                    <span class="tech-badge">Python</span>
+                </div>
+                <div class="cta-button">View on GitHub →</div>
+            </a>
+
+            <!-- Fixly -->
             <div class="project-card"
                 onclick="window.open('https://fixly-webskitters.onrender.com/', '_blank', 'noopener,noreferrer');"
                 style="cursor: pointer;">
                 <div class="project-icon">🔧</div>
-                <h3 class="project-name">Fixly - Local Service Platform</h3>
+                <h3 class="project-name">Fixly — Local Service Platform</h3>
                 <p class="project-description">
-                    Complete Django + DRF backend with dual-role authentication, service listings, user/provider
-                    dashboards, and real-time booking system.
+                    Complete Django + DRF backend with dual-role authentication, service listings, user/provider dashboards, and real-time booking system.
                 </p>
                 <div class="project-tech">
                     <span class="tech-badge">Django</span>
@@ -1105,12 +984,10 @@
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
                     <a href="https://fixly-webskitters.onrender.com/" target="_blank" rel="noopener noreferrer" class="cta-button" style="color: var(--text-white); text-decoration: none; position: relative; z-index: 10;" onclick="event.stopPropagation();">Visit Website →</a>
                     <a href="https://github.com/Mdaliraza1/fixly_webskitters" target="_blank" rel="noopener noreferrer" class="cta-button" style="color: var(--text-white); text-decoration: none; position: relative; z-index: 10;" onclick="event.stopPropagation();">View on GitHub →</a>
-                    <a href="https://documenter.getpostman.com/view/44342859/2sB2j7eVGw" target="_blank"
-                        rel="noopener noreferrer" class="cta-button"
-                        style="color: var(--text-white); text-decoration: none; position: relative; z-index: 10;"
-                        onclick="event.stopPropagation();">Postman Documentation →</a>
+                    <a href="https://documenter.getpostman.com/view/44342859/2sB2j7eVGw" target="_blank" rel="noopener noreferrer" class="cta-button" style="color: var(--text-white); text-decoration: none; position: relative; z-index: 10;" onclick="event.stopPropagation();">Postman Docs →</a>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -1125,7 +1002,7 @@
                     <div class="experience-role">B.Tech in Computer Science & Engineering (Data Science)</div>
                     <div class="experience-company">MCKV Institute of Engineering, Kolkata</div>
                 </div>
-                <div class="experience-duration">Aug 2022 – June 2025</div>
+                <div class="experience-duration">Aug 2022 – Jun 2025</div>
             </div>
             <p class="experience-description">CGPA: 7.52</p>
         </div>
@@ -1150,21 +1027,22 @@
         <div class="cert-grid">
             <div class="cert-item">
                 <h4 class="cert-title">Python (Basic)</h4>
-                <p class="cert-org">HackerRank - 2023</p>
+                <p class="cert-org">HackerRank</p>
             </div>
             <div class="cert-item">
                 <h4 class="cert-title">Software Engineer</h4>
-                <p class="cert-org">HackerRank - 2023</p>
+                <p class="cert-org">HackerRank</p>
             </div>
             <div class="cert-item">
                 <h4 class="cert-title">Data Science Foundation</h4>
-                <p class="cert-org">Great Learning - 2023</p>
+                <p class="cert-org">Great Learning</p>
             </div>
             <div class="cert-item">
-                <h4 class="cert-title">Java Programmer</h4>
-                <p class="cert-org">2022</p>
+                <h4 class="cert-title">Java Programmer Certification</h4>
+                <p class="cert-org">Certified</p>
             </div>
         </div>
     </div>
+
 </div>
 {% endblock %}

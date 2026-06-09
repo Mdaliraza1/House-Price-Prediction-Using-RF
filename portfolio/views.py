@@ -7,12 +7,16 @@ def portfolio_home(request):
     """
     context = {
         'name': 'Md Ali Raza',
-        'title': 'Python Backend Developer & ML Engineer',
+        'title': 'Backend Engineer & Data Analyst',
         'email': 'mdaliraza92@gmail.com',
         'phone': '+91 98049 21119',
-        'github': 'mdaliraza1',
+        'github': 'Mdaliraza1',
         'linkedin': 'mdaliraza1',
-        'summary': 'Computer Science undergraduate and Python backend developer with hands-on experience building production-ready Django applications, RESTful APIs, and deploying ML models (XGBoost) in web applications. Skilled in Django REST Framework, machine learning workflows, and AWS deployment.',
+        'summary': (
+            'Backend Engineer and Data Analyst with hands-on experience in Python, SQL, and REST API development. '
+            'Proficient in data extraction, transformation, and analysis using Pandas, NumPy, and PostgreSQL. '
+            'Experienced in building production-grade backend systems with Django and deploying ML-powered analytics applications. '
+            'Skilled in creating dashboards and visualizations using Tableau, with a strong foundation in data science from a B.Tech in Computer Science (Data Science).'
+        ),
     }
     return render(request, 'portfolio/home.html', context)
-
