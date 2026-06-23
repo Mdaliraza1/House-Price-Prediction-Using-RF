@@ -940,7 +940,7 @@ body.portfolio-page .nav-cta:hover {
 }
 
 /* Contact */
-.contact-section { text-align: center; padding-bottom: 6rem; }
+.contact-section { text-align: center; padding-bottom: 3rem; }
 
 .contact-box {
     max-width: 600px;
@@ -990,10 +990,16 @@ body.portfolio-page .nav-cta:hover {
 
 /* Footer */
 body.portfolio-page .footer {
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
     background: var(--bg-elevated) !important;
     border-top: 1px solid var(--border) !important;
     padding: 1.75rem 0 !important;
-    margin-top: 0 !important;
+    margin-top: 3rem !important;
+    box-shadow: none !important;
+    z-index: 1;
 }
 
 body.portfolio-page .footer .container {
@@ -1003,6 +1009,11 @@ body.portfolio-page .footer .container {
     flex-wrap: wrap !important;
     gap: 1rem !important;
     max-width: 1140px !important;
+    text-align: left !important;
+}
+
+body.portfolio-page .footer-social {
+    margin-top: 0 !important;
 }
 
 body.portfolio-page .footer-text {
