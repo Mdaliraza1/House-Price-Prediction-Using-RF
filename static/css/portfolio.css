@@ -1072,6 +1072,276 @@ body.portfolio-page .footer-social-link:hover {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ========== 3D SCENE & MOTION ========== */
+.cursor-glow {
+    position: fixed;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.16) 0%, rgba(6, 182, 212, 0.06) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    will-change: transform;
+    mix-blend-mode: screen;
+}
+
+.cursor-glow.active { opacity: 1; }
+
+.portfolio-hero {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+    overflow: hidden;
+}
+
+.scene-3d {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.hero-grid {
+    position: relative;
+    z-index: 1;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(2px);
+    will-change: transform;
+    --px: 0px;
+    --py: 0px;
+    animation: floatOrb 8s ease-in-out infinite;
+}
+
+.orb-1 {
+    width: 280px;
+    height: 280px;
+    top: 8%;
+    right: 8%;
+    background: radial-gradient(circle at 30% 30%, rgba(129, 140, 248, 0.45), rgba(99, 102, 241, 0.08) 55%, transparent 70%);
+    animation-duration: 9s;
+}
+
+.orb-2 {
+    width: 180px;
+    height: 180px;
+    bottom: 18%;
+    left: 6%;
+    background: radial-gradient(circle at 40% 40%, rgba(34, 211, 238, 0.35), rgba(6, 182, 212, 0.06) 55%, transparent 70%);
+    animation-duration: 11s;
+    animation-delay: -2s;
+}
+
+.orb-3 {
+    width: 120px;
+    height: 120px;
+    top: 42%;
+    left: 42%;
+    background: radial-gradient(circle at 40% 40%, rgba(167, 139, 250, 0.4), transparent 70%);
+    animation-duration: 7s;
+    animation-delay: -4s;
+}
+
+.float-shape {
+    position: absolute;
+    will-change: transform;
+    opacity: 0.55;
+    --px: 0px;
+    --py: 0px;
+}
+
+.shape-ring {
+    width: 64px;
+    height: 64px;
+    top: 22%;
+    left: 18%;
+    border: 2px solid rgba(129, 140, 248, 0.45);
+    border-radius: 50%;
+    box-shadow: 0 0 24px rgba(99, 102, 241, 0.2), inset 0 0 16px rgba(99, 102, 241, 0.1);
+    animation: spinFloat 14s linear infinite;
+}
+
+.shape-cube {
+    width: 36px;
+    height: 36px;
+    bottom: 28%;
+    right: 22%;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.35), rgba(6, 182, 212, 0.2));
+    border: 1px solid rgba(165, 180, 252, 0.35);
+    border-radius: 8px;
+    animation: cubeFloat 10s ease-in-out infinite;
+    box-shadow: 8px 8px 0 rgba(99, 102, 241, 0.12);
+}
+
+.shape-pyramid {
+    width: 0;
+    height: 0;
+    top: 58%;
+    right: 12%;
+    border-left: 22px solid transparent;
+    border-right: 22px solid transparent;
+    border-bottom: 38px solid rgba(34, 211, 238, 0.28);
+    filter: drop-shadow(0 8px 16px rgba(6, 182, 212, 0.25));
+    animation: pyramidFloat 12s ease-in-out infinite;
+}
+
+@keyframes floatOrb {
+    0%, 100% { transform: translate3d(var(--px), var(--py), 0) scale(1); }
+    50% { transform: translate3d(calc(var(--px) + 12px), calc(var(--py) - 18px), 0) scale(1.06); }
+}
+
+@keyframes spinFloat {
+    0% { transform: translate3d(var(--px), var(--py), 0) rotate(0deg); }
+    50% { transform: translate3d(var(--px), calc(var(--py) - 14px), 0) rotate(180deg); }
+    100% { transform: translate3d(var(--px), var(--py), 0) rotate(360deg); }
+}
+
+@keyframes cubeFloat {
+    0%, 100% { transform: translate3d(var(--px), var(--py), 0) rotateX(45deg) rotateZ(45deg); }
+    50% { transform: translate3d(var(--px), calc(var(--py) - 16px), 0) rotateX(55deg) rotateZ(55deg); }
+}
+
+@keyframes pyramidFloat {
+    0%, 100% { transform: translate3d(var(--px), var(--py), 0) rotate(0deg); }
+    50% { transform: translate3d(var(--px), calc(var(--py) - 20px), 0) rotate(8deg); }
+}
+
+.tilt-card {
+    position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.tilt-shine {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 2;
+    transition: opacity 0.25s ease;
+    mix-blend-mode: soft-light;
+}
+
+.hero-card.tilt-card {
+    animation: heroFloat 6s ease-in-out infinite;
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 0 60px rgba(99, 102, 241, 0.12);
+}
+
+.hero-card.tilt-card:hover {
+    animation-play-state: paused;
+}
+
+@keyframes heroFloat {
+    0%, 100% { transform: translateY(0) rotateX(2deg) rotateY(-3deg); }
+    50% { transform: translateY(-14px) rotateX(4deg) rotateY(3deg); }
+}
+
+.hero-visual {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+.magnetic-btn {
+    transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, filter 0.2s ease, border-color 0.2s ease, background 0.2s ease !important;
+}
+
+.skill-card,
+.project-card,
+.timeline-item,
+.info-card {
+    transform-style: preserve-3d;
+}
+
+.skill-card.visible,
+.project-card.visible {
+    animation: cardRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes cardRise {
+    from {
+        opacity: 0;
+        transform: translateY(36px) rotateX(8deg) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0) scale(1);
+    }
+}
+
+.project-card:hover .project-icon {
+    transform: translateZ(24px) scale(1.08);
+    transition: transform 0.3s ease;
+}
+
+.project-icon {
+    transition: transform 0.3s ease;
+}
+
+.stat-item {
+    transition: transform 0.25s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-4px) scale(1.04);
+}
+
+.social-link {
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.social-link:hover {
+    transform: translateY(-4px) scale(1.08);
+}
+
+.section-title {
+    transition: transform 0.5s ease;
+}
+
+.section.visible .section-title {
+    animation: titleSlide 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes titleSlide {
+    from { opacity: 0; transform: translateX(-20px); filter: blur(4px); }
+    to { opacity: 1; transform: translateX(0); filter: blur(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .orb,
+    .float-shape,
+    .hero-card.tilt-card,
+    .cursor-glow {
+        animation: none !important;
+    }
+
+    .tilt-card,
+    .magnetic-btn {
+        transform: none !important;
+    }
+
+    .skill-card.visible,
+    .project-card.visible,
+    .section.visible .section-title {
+        animation: none !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .scene-3d { opacity: 0.5; }
+    .cursor-glow { display: none; }
+    .hero-card.tilt-card { animation: none; }
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
@@ -1124,4 +1394,5 @@ body.portfolio-page .footer-social-link:hover {
     .project-card.featured .project-highlights { grid-template-columns: 1fr; }
     .demo-banner { flex-direction: column; text-align: center; }
     .back-to-top { bottom: 1.25rem; right: 1.25rem; }
+    .float-shape { display: none; }
 }

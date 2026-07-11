@@ -4,25 +4,32 @@
 {% block title %}{{ name }} — {{ title }}{% endblock %}
 
 {% block content %}
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
 <!-- Hero -->
 <section class="portfolio-hero" id="hero" data-section-id="hero">
+    <div class="scene-3d" aria-hidden="true">
+        <span class="orb orb-1" data-depth="0.15"></span>
+        <span class="orb orb-2" data-depth="0.28"></span>
+        <span class="orb orb-3" data-depth="0.1"></span>
+        <span class="float-shape shape-ring" data-depth="0.35"></span>
+        <span class="float-shape shape-cube" data-depth="0.22"></span>
+        <span class="float-shape shape-pyramid" data-depth="0.4"></span>
+    </div>
+
     <div class="hero-grid">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span class="pulse-dot"></span>
-                Open to freelance &amp; contract work
-            </div>
+        <div class="hero-content" data-depth="0.05">
             <h1 class="profile-name">Building backends<br>with <span class="highlight">AI &amp; scale</span></h1>
             <p class="profile-name-sub">{{ name }}</p>
             <p class="profile-title">{{ title }}</p>
             <p class="profile-tagline"><span id="typingTagline"></span><span class="cursor-blink">|</span></p>
             <p class="hero-summary">{{ summary }}</p>
             <div class="hero-actions">
-                <a href="#contact" class="btn-primary">
+                <a href="#contact" class="btn-primary magnetic-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                     Get In Touch
                 </a>
-                <a href="#projects" class="btn-secondary">View My Work</a>
+                <a href="#projects" class="btn-secondary magnetic-btn">View My Work</a>
             </div>
             <div class="social-row">
                 <a href="https://github.com/{{ github }}" target="_blank" rel="noopener noreferrer" class="social-link" title="GitHub">
@@ -40,8 +47,9 @@
             </div>
         </div>
 
-        <div class="hero-visual">
-            <div class="hero-card">
+        <div class="hero-visual" data-depth="0.12">
+            <div class="hero-card tilt-card" id="heroCard">
+                <div class="tilt-shine"></div>
                 <div class="hero-card-header">
                     <span class="hero-card-dot"></span>
                     <span class="hero-card-dot"></span>
@@ -72,7 +80,8 @@
     <h2 class="section-title">What I Work With</h2>
     <div class="skills-grid">
         {% for skill in skills %}
-        <div class="skill-card">
+        <div class="skill-card tilt-card">
+            <div class="tilt-shine"></div>
             <h3 class="skill-card-title">{{ skill.title }}</h3>
             <div class="skill-tags">
                 {% for item in skill.items %}
@@ -122,12 +131,13 @@
     <div class="projects-grid">
         {% for project in projects %}
         {% if project.live %}
-        <a href="{{ project.live }}" target="_blank" rel="noopener noreferrer" class="project-card{% if project.featured %} featured{% endif %}">
+        <a href="{{ project.live }}" target="_blank" rel="noopener noreferrer" class="project-card tilt-card{% if project.featured %} featured{% endif %}">
         {% elif project.github %}
-        <a href="{{ project.github }}" target="_blank" rel="noopener noreferrer" class="project-card{% if project.featured %} featured{% endif %}">
+        <a href="{{ project.github }}" target="_blank" rel="noopener noreferrer" class="project-card tilt-card{% if project.featured %} featured{% endif %}">
         {% else %}
-        <div class="project-card{% if project.featured %} featured{% endif %}">
+        <div class="project-card tilt-card{% if project.featured %} featured{% endif %}">
         {% endif %}
+            <div class="tilt-shine"></div>
             {% if project.featured %}
             <span class="project-badge">Latest · AI Backend</span>
             {% endif %}
@@ -209,11 +219,11 @@
     <h2 class="section-title">Let's Build Something</h2>
     <div class="contact-box">
         <p>
-            I'm open to freelance AI backend and platform work — LLM microservices, FastAPI/Django APIs,
-            IoT backends, data pipelines, and cloud deployments. Reach out and let's discuss your project.
+            Experienced in AI backend and platform roles — LLM microservices, FastAPI/Django APIs,
+            IoT backends, data pipelines, and cloud deployments. Reach out and let's connect.
         </p>
         <div class="contact-links">
-            <a href="mailto:{{ email }}?subject=Freelance%20Project%20Inquiry" class="contact-chip">
+            <a href="mailto:{{ email }}?subject=Hello%20from%20your%20Portfolio" class="contact-chip">
                 ✉️ {{ email }}
             </a>
             <a href="tel:{{ phone|cut:' ' }}" class="contact-chip">
@@ -227,7 +237,7 @@
             </a>
         </div>
         <div style="margin-top: 2rem;">
-            <a href="mailto:{{ email }}?subject=Freelance%20Project%20Inquiry" class="btn-primary">Start a Conversation</a>
+            <a href="mailto:{{ email }}?subject=Hello%20from%20your%20Portfolio" class="btn-primary">Start a Conversation</a>
         </div>
     </div>
 </section>
