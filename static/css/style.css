@@ -46,7 +46,7 @@ body {
     padding: 1rem 0;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 10000;
 }
 
 .header .container {
@@ -450,10 +450,7 @@ select.form-input {
     text-align: center;
     color: var(--text-secondary);
     margin-top: 3rem;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: relative;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     border-top: 1px solid rgba(99, 102, 241, 0.1);
 }
