@@ -12,7 +12,10 @@
         font-size: 0.95rem;
         margin-bottom: 1rem;
     }
-
+    /* Ensure header stays above Leaflet map controls */
+    .header {
+        z-index: 9999 !important;
+    }
     .breadcrumb a {
         color: white;
         text-decoration: none;
@@ -29,6 +32,7 @@
         opacity: 0.7;
     }
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 {% endblock %}
 
 {% block content %}
@@ -63,10 +67,12 @@
                             placeholder="Search for an address or place..."
                             autocomplete="off"
                             aria-label="Search for property location"
+                            list="locationSuggestions"
                         >
                         <span class="search-icon" aria-hidden="true">🔍</span>
                     </div>
                 </div>
+                <datalist id="locationSuggestions"></datalist>
                     <div class="location-picker-controls">
                     <button 
                         type="button" 
@@ -313,17 +319,9 @@
     </div>
 </div>
 
-{% if google_maps_api_key %}
-    {# Load map.js before Google Maps API so initMapPicker is defined #}
-    {% load static %}
-    <script src="{% static 'js/map.js' %}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&loading=async&callback=initMapPicker" async defer></script>
-{% else %}
-    <div class="alert alert-error" style="margin-top: 1rem;">
-        <span class="alert-icon">⚠️</span>
-        <span class="alert-message">Google Maps API key is not configured. Please add GOOGLE_MAPS_API_KEY to your settings.ini file.</span>
-    </div>
-{% endif %}
+{% load static %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{% static 'js/map_leaflet.js' %}"></script>
 {% endblock %}
 
 {% block extra_js %}

@@ -10,7 +10,7 @@ const AMENITY_TYPES = [
 ];
 
 const MAX_RESULTS = 5;
-const TIMEOUT = 15000;
+const TIMEOUT = 8000;
 
 function initAmenitiesSearch(lat, lng) {
     const card = document.getElementById('amenitiesCard');
@@ -73,7 +73,7 @@ function fetchAmenities(propertyLat, propertyLng) {
         } else if (searchesCompleted === AMENITY_TYPES.length) {
             showError('No nearby amenities found.');
         } else {
-            showError('Unable to load amenities. Check API settings.');
+            showError('Amenities are taking too long. Please try again.');
         }
     }, TIMEOUT);
 
@@ -100,93 +100,72 @@ function fetchAmenities(propertyLat, propertyLng) {
         }, 300);
     }
 
+    function placeDistanceKm(place) {
+        const loc = place.geometry && place.geometry.location;
+        if (!loc) return Number.POSITIVE_INFINITY;
+        return calculateDistance(propertyLat, propertyLng, loc.lat, loc.lng);
+    }
+
+    function sortByDistance(places) {
+        return places.slice().sort((a, b) => placeDistanceKm(a) - placeDistanceKm(b));
+    }
+
     function filterPlaces(places, amenityType) {
+        // OSM results are already tagged by type on the backend.
+        // Prefer name-based quality filters, but fall back to closest tagged places.
         if (places.length === 0) return [];
 
-        let filtered = places;
         const name = (place) => (place.name || '').toLowerCase();
+        let preferred = places;
 
         if (amenityType.type === 'hospital') {
-            const nonHospitalTerms = ['nursing home', 'pharmacy', 'clinic', 'medical store', 'medical hall',
-                'medical shop', 'diagnostic', 'lab', 'laboratory', 'imaging', 'pathology',
-                'medical center', 'health center'];
-            filtered = places.filter(p => {
+            const junk = ['pharmacy', 'medical store', 'medical hall', 'medical shop',
+                'diagnostic', 'pathology', 'imaging', 'nursing home'];
+            preferred = places.filter(p => {
                 const n = name(p);
-                const isNonHospital = nonHospitalTerms.some(term => n.includes(term)) ||
-                    (n.includes('medical') && !n.includes('hospital'));
-                return !isNonHospital && n.includes('hospital');
+                return !junk.some(term => n.includes(term));
             });
-            if (filtered.length === 0) {
-                filtered = places.filter(p => {
-                    const n = name(p);
-                    return n.includes('hospital') && !n.includes('medical store') && !n.includes('medical hall');
-                });
-            }
+            const withHospital = preferred.filter(p => name(p).includes('hospital'));
+            if (withHospital.length > 0) preferred = withHospital;
         }
 
         if (amenityType.type === 'train_station') {
-            filtered = places.filter(p => {
+            preferred = places.filter(p => {
                 const n = name(p);
                 const isCabin = n.includes('cabin') && !n.includes('station') && !n.includes('railway');
-                return !isCabin && (n.includes('station') || n.includes('railway') || n.includes('junction'));
+                return !isCabin;
             });
-            if (filtered.length === 0) {
-                filtered = places.filter(p => {
-                    const n = name(p);
-                    return n.includes('railway') || n.includes('junction');
-                });
-            }
         }
 
         if (amenityType.type === 'subway_station') {
-            const nonStationTerms = ['watch', 'shop', 'store', 'restaurant', 'hotel', 'mall', 'market'];
-            filtered = places.filter(p => {
+            const junk = ['watch', 'shop', 'store', 'restaurant', 'hotel', 'mall', 'market'];
+            preferred = places.filter(p => {
                 const n = name(p);
-                const isCabin = n.includes('cabin') && !n.includes('station') && !n.includes('metro') && !n.includes('subway');
-                const isPlatform = n.includes('platform') && !n.includes('station') && !n.includes('metro') && !n.includes('subway');
-                const isGate = n.includes('gate') && !n.includes('station');
-                const isNonStation = nonStationTerms.some(term => n.includes(term));
-                return !isCabin && !isPlatform && !isGate && !isNonStation &&
-                    (n.includes('station') || (n.includes('metro') && (n.includes('station') || n.includes('rail'))) ||
-                        (n.includes('subway') && (n.includes('station') || n.includes('rail'))));
+                const isGate = n.includes('gate') && !n.includes('station') && !n.includes('metro');
+                return !isGate && !junk.some(term => n.includes(term));
             });
-            if (filtered.length === 0) {
-                filtered = places.filter(p => {
-                    const n = name(p);
-                    const isNonStation = n.includes('watch') || n.includes('shop') || n.includes('store');
-                    return (n.includes('metro') || n.includes('subway')) && !n.includes('gate') &&
-                        !isNonStation && (n.includes('station') || n.includes('rail'));
-                });
-            }
         }
 
         if (amenityType.type === 'bank') {
-            filtered = places.filter(p => !name(p).includes('csp'));
+            preferred = places.filter(p => !name(p).includes('csp'));
         }
 
         if (amenityType.type === 'school') {
-            const nonEducationalTerms = ['driving school', 'motor training', 'coaching center', 'tuition center',
-                'tutorial center', 'open school', 'distance learning', 'correspondence',
-                'pre-school', 'preschool', 'pre school', 'play school', 'playschool',
-                'kindergarten', 'nursery', 'junior'];
-            filtered = places.filter(p => {
-                const n = name(p);
-                const isNonEducational = nonEducationalTerms.some(term => n.includes(term)) ||
-                    (n.includes('training school') && !n.includes('high school'));
-                return !isNonEducational && (n.includes('school') || n.includes('education'));
-            });
+            const junk = ['driving school', 'motor training', 'coaching center', 'tuition center',
+                'tutorial center', 'distance learning', 'correspondence'];
+            preferred = places.filter(p => !junk.some(term => name(p).includes(term)));
         }
 
         if (amenityType.type === 'university') {
-            filtered = places.filter(p => {
+            preferred = places.filter(p => {
                 const n = name(p);
                 return !n.includes('driving school') && !n.includes('motor training') &&
-                    !n.includes('training school') && !n.includes('coaching') &&
-                    (n.includes('college') || n.includes('university') || n.includes('institute'));
+                    !n.includes('coaching');
             });
         }
 
-        return filtered;
+        const pool = preferred.length > 0 ? preferred : places;
+        return sortByDistance(pool);
     }
 
     async function calculateAllDistances() {
@@ -195,9 +174,10 @@ function fetchAmenities(propertyLat, propertyLng) {
             return;
         }
 
+        // Match Overpass search radius (~1.5 km).
         amenities = amenities.filter(amenity => {
-            const distance = calculateDistance(propertyLat, propertyLng, amenity.location.lat, amenity.location.lng);
-            return distance <= 2;
+            const distanceKm = calculateDistance(propertyLat, propertyLng, amenity.location.lat, amenity.location.lng);
+            return distanceKm <= 1.5;
         });
 
         if (amenities.length === 0) {
@@ -205,75 +185,12 @@ function fetchAmenities(propertyLat, propertyLng) {
             return;
         }
 
-        const destinations = amenities.map(a => `${a.location.lat},${a.location.lng}`).join('|');
-
-        try {
-            // Use optimized endpoint that fetches both modes in a single request
-            const response = await fetch(`/house-price-prediction/api/batch-distance-both/?origin_lat=${propertyLat}&origin_lng=${propertyLng}&destinations=${encodeURIComponent(destinations)}`);
-
-            if (response.ok) {
-                const data = await response.json();
-
-                if (data.status === 'OK' &&
-                    data.walking && data.walking.rows && data.walking.rows[0] &&
-                    data.driving && data.driving.rows && data.driving.rows[0]) {
-
-                    const walkElements = data.walking.rows[0].elements;
-                    const driveElements = data.driving.rows[0].elements;
-
-                    amenities.forEach((amenity, index) => {
-                        if (index < walkElements.length && walkElements[index] && walkElements[index].status === 'OK') {
-                            const walkText = walkElements[index].duration.text;
-                            const walkMinutes = parseTime(walkText);
-                            amenity.walkingDistance = walkMinutes <= 30 ? walkText : 'N/A';
-                        } else {
-                            // Fallback: estimate walking time from straight-line distance
-                            // For fallback estimates, be more lenient (up to 90 mins) since API route unavailable
-                            const straightLineDistance = calculateDistance(
-                                propertyLat, propertyLng,
-                                amenity.location.lat, amenity.location.lng
-                            );
-                            const estimatedWalkTime = estimateWalkingTime(straightLineDistance);
-                            const estimatedWalkMinutes = parseTime(estimatedWalkTime);
-                            // Show estimate if <= 90 minutes (more lenient for fallback), otherwise N/A
-                            amenity.walkingDistance = estimatedWalkMinutes <= 90 ? estimatedWalkTime : 'N/A';
-                        }
-
-                        if (index < driveElements.length && driveElements[index] && driveElements[index].status === 'OK') {
-                            const driveText = driveElements[index].duration.text;
-                            const driveMinutes = parseTime(driveText);
-                            amenity.drivingDistance = driveMinutes <= 20 ? driveText : 'N/A';
-                        } else {
-                            amenity.drivingDistance = 'N/A';
-                        }
-                    });
-
-                    amenities = amenities.filter(amenity => {
-                        if (amenity.walkingDistance === 'Calculating...' || amenity.drivingDistance === 'Calculating...') {
-                            return false;
-                        }
-                        // Show amenities if at least one distance is available (not N/A)
-                        const hasWalking = amenity.walkingDistance !== 'N/A';
-                        const hasDriving = amenity.drivingDistance !== 'N/A';
-                        
-                        if (!hasWalking && !hasDriving) {
-                            return false;
-                        }
-                        
-                        const walkMinutes = parseTime(amenity.walkingDistance);
-                        const driveMinutes = parseTime(amenity.drivingDistance);
-                        // At least one distance should be within reasonable limits
-                        return (hasWalking && walkMinutes <= 30) || (hasDriving && driveMinutes <= 20);
-                    });
-                } else {
-                    setAllDistancesToNA();
-                }
-            } else {
-                setAllDistancesToNA();
-            }
-        } catch (error) {
-            setAllDistancesToNA();
-        }
+        // Fully free option: estimate walking/driving time from straight-line distance.
+        amenities.forEach(amenity => {
+            const distanceKm = calculateDistance(propertyLat, propertyLng, amenity.location.lat, amenity.location.lng);
+            amenity.walkingDistance = estimateWalkingTime(distanceKm);
+            amenity.drivingDistance = estimateDrivingTime(distanceKm);
+        });
 
         checkAllDone();
     }
@@ -310,45 +227,53 @@ function fetchAmenities(propertyLat, propertyLng) {
         return closestPlaces[0];
     }
 
-    // Use optimized multithreaded endpoint to fetch all amenities in parallel
+    // Single free Overpass-backed endpoint (all amenity types).
     async function fetchAllAmenitiesOptimized() {
         try {
-            const response = await fetch(`/house-price-prediction/api/all-amenities/?lat=${propertyLat}&lng=${propertyLng}`);
-            if (response.ok) {
-                const data = await response.json();
-                if (data && data.status === 'OK' && data.results) {
-                    // Process all amenity types from the parallel response
-                    AMENITY_TYPES.forEach(amenityType => {
-                        const amenityData = data.results[amenityType.type];
-                        if (amenityData && amenityData.status === 'OK' && amenityData.results && amenityData.results.length > 0) {
-                            const filtered = filterPlaces(amenityData.results, amenityType);
+            const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+            const abortTimer = controller ? setTimeout(() => controller.abort(), TIMEOUT) : null;
+            const response = await fetch(
+                `/house-price-prediction/api/all-amenities/?lat=${propertyLat}&lng=${propertyLng}`,
+                controller ? { signal: controller.signal } : undefined
+            );
+            if (abortTimer) clearTimeout(abortTimer);
 
-                            const needsTextSearch = ['train_station', 'subway_station', 'hospital'].includes(amenityType.type);
+            const data = await response.json().catch(() => null);
 
-                            if (needsTextSearch) {
-                                if (filtered.length > 0) {
-                                    const bestPlace = filtered[0];
-                                    addAmenity(createAmenity(bestPlace, amenityType));
-                                }
-                            } else {
-                                const bestPlace = selectBestPlace(filtered, amenityType);
-                                if (bestPlace) {
-                                    addAmenity(createAmenity(bestPlace, amenityType));
-                                }
-                            }
+            if (!response.ok || !data || data.status === 'ERROR') {
+                showError('Nearby amenities are temporarily unavailable. Please try again.');
+                searchesCompleted = AMENITY_TYPES.length;
+                displayed = true;
+                clearTimeout(timeout);
+                return;
+            }
+
+            if (data.results) {
+                AMENITY_TYPES.forEach(amenityType => {
+                    const amenityData = data.results[amenityType.type];
+                    if (amenityData && amenityData.results && amenityData.results.length > 0) {
+                        const filtered = filterPlaces(amenityData.results, amenityType);
+                        const bestPlace = selectBestPlace(filtered.length ? filtered : amenityData.results, amenityType);
+                        if (bestPlace) {
+                            addAmenity(createAmenity(bestPlace, amenityType));
                         }
-                    });
-                    searchesCompleted = AMENITY_TYPES.length;
-                    calculateAllDistances();
-                    return;
-                }
+                    }
+                });
+                searchesCompleted = AMENITY_TYPES.length;
+                calculateAllDistances();
+                return;
             }
         } catch (error) {
             console.error('Error fetching amenities:', error);
-            showError('Unable to load amenities. Please try again.');
+            if (!displayed) {
+                showError('Nearby amenities are temporarily unavailable. Please try again.');
+                displayed = true;
+                clearTimeout(timeout);
+            }
+            searchesCompleted = AMENITY_TYPES.length;
+            return;
         }
 
-        // If we reach here, something went wrong
         searchesCompleted = AMENITY_TYPES.length;
         calculateAllDistances();
     }
@@ -387,7 +312,7 @@ function showAmenities(amenities) {
     amenities.forEach(amenity => {
         const card = document.createElement('div');
         card.className = 'amenity-item';
-        
+        ////
         // Build distance items only for available distances
         const distanceItems = [];
         if (amenity.walkingDistance !== 'N/A' && amenity.walkingDistance !== 'Calculating...') {
@@ -475,6 +400,27 @@ function estimateWalkingTime(distanceKm) {
     const overheadFactor = 1.2;
     const minutes = Math.round((distanceKm / walkingSpeedKmPerMin) * overheadFactor);
     
+    if (minutes < 1) {
+        return '1 min';
+    } else if (minutes < 60) {
+        return `${minutes} mins`;
+    } else {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        if (mins === 0) {
+            return `${hours} hour${hours > 1 ? 's' : ''}`;
+        }
+        return `${hours} hour${hours > 1 ? 's' : ''} ${mins} mins`;
+    }
+}
+
+function estimateDrivingTime(distanceKm) {
+    // Approximate average city driving speed (km/min) with overhead.
+    // 0.55 km/min ~= 33 km/h average, then we inflate for traffic/road conditions.
+    const drivingSpeedKmPerMin = 0.55;
+    const overheadFactor = 1.35;
+    const minutes = Math.round((distanceKm / drivingSpeedKmPerMin) * overheadFactor);
+
     if (minutes < 1) {
         return '1 min';
     } else if (minutes < 60) {
